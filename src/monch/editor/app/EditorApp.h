@@ -33,6 +33,8 @@ public:
 
     [[nodiscard]] bool has_resized() const;
 
+    void event_thread_loop();
+
 protected:
     void render_me() final;
     void after_children_rendered() final;

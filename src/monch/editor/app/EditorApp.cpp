@@ -22,8 +22,6 @@ EditorApp::EditorApp()
 EditorApp::~EditorApp()
 {
     if (_event_thread) {
-        // Stop event thread
-        stop();
         _event_thread->join();
         delete _event_thread;
     }
@@ -40,11 +38,23 @@ EditorApp &EditorApp::ref()
 }
 
 
+void EditorApp::event_thread_loop()
+{
+    const double framerate = 60.;
+    const uint update_period_ms = uint(1e3/framerate);
+    while (!_should_quit)
+    {
+        this->process_events();
+        std::this_thread::sleep_for(std::chrono::milliseconds(update_period_ms));
+    }
+}
+
+
 void EditorApp::run()
 {
     const double framerate = 30.;
     const uint update_period_ms = uint(1e3/framerate);
-    _event_thread = new std::thread([this](){this->process_events();});
+    _event_thread = new std::thread([this](){this->event_thread_loop();});
     while (!_should_quit) {
         render();
         std::this_thread::sleep_for(std::chrono::milliseconds(update_period_ms));

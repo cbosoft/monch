@@ -15,6 +15,7 @@ void Renderable::render()
     render_me();
     render_children();
     after_children_rendered();
+    set_not_moved();
 }
 
 void Renderable::render_children()
