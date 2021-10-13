@@ -7,7 +7,7 @@
 Renderable::Renderable(Object *parent)
     :   Object(parent)
 {
-    //
+    add_type("renderable");
 }
 
 void Renderable::render()
@@ -22,8 +22,9 @@ void Renderable::render_children()
 {
     for (auto *child : *this)
     {
-        // TODO check if child is actually a renderable
-        ((Renderable *)child)->render();
+        if (child->is_a("renderable")) {
+            ((Renderable *) child)->render();
+        }
     }
 }
 

@@ -43,10 +43,16 @@ public:
 
     [[nodiscard]] bool has_changed_position() const;
 
+    bool is_a(const std::string &type);
+
 protected:
     void set_not_moved();
+    void add_type(const std::string &type_key);
 
 private:
+    bool is_a(std::size_t hsh);
+    void add_type(std::size_t hsh);
+
     Event *get_next_event();
     std::mutex _m;
     std::list<Event *> _events;
@@ -56,6 +62,7 @@ private:
 
     Object *_parent;
     std::list<Object *> _children;
+    std::list<std::size_t> _types;
 };
 
 
