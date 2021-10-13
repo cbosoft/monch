@@ -1,0 +1,50 @@
+//
+// Created by Christopher Boyle on 12/10/2021.
+//
+
+#ifndef MONCH_RENDERER_H
+#define MONCH_RENDERER_H
+
+#include <map>
+#include <string>
+
+#include <monch/util.h>
+#include <monch/rendering/gl.h>
+#include <monch/rendering/vertex_buffer/VertexBuffer.h>
+
+class Renderable;
+class Renderer {
+public:
+    static Renderer &ref();
+    ~Renderer() =default;
+    Renderer(const Renderer &) =delete;
+    Renderer &operator=(const Renderer &) =delete;
+
+    GLFWwindow *init_window();
+
+    void use_assigned_shader(Renderable *rbl);
+    void assign_shader(Renderable *rbl, const std::string &name);
+
+    void error_check(const std::string &from) const;
+
+    static NormalisedPoint convert_window_to_normal(const WindowPoint &pt);
+
+private:
+
+    Renderer() =default;
+
+    void load_shader_program(const std::string &vertex_source, const std::string &fragment_source, const std::string &name);
+    static uint compile_shader(const std::string &source, int shader_type);
+    static uint compile_vertex(const std::string &source);
+    static uint compile_fragment(const std::string &source);
+
+    static void use_shader(uint shader);
+
+    std::map<Renderable *, uint> _assigned_shaders;
+    std::map<std::string, uint> _shaders;
+
+    // TODO: merge rendering stuff from window into here
+};
+
+
+#endif //MONCH_RENDERER_H

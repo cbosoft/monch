@@ -1,0 +1,7 @@
+#ifndef MONCH_FONTPATH_H
+#define MONCH_FONTPATH_H
+
+#define FONT_PATH "@FONT_PATH@"
+#define FONT_FALLBACK_PATH "@FONT_FALLBACK_PATH@"
+
+#endif

@@ -1,0 +1,13 @@
+# Configured files
+src/monch/rendering/renderer/shaders.h
+src/monch/rendering/font/manager/font_path.h
+
+# build dirs
+cmake-build-*
+
+# Editor stuff
+*.un~
+.idea
+
+# OS Stuff
+.DS_store
