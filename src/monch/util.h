@@ -8,7 +8,7 @@
 typedef unsigned int uint;
 
 struct WindowPoint {
-    uint x, y;
+    int x, y;
 
     WindowPoint operator+(const WindowPoint &o) const
     {

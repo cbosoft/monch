@@ -8,11 +8,11 @@
 
 struct Character {
     uint texture_id;
-    uint w;
-    uint h;
-    uint bearing_x;
-    uint bearing_y;
-    uint advance;
+    int w;
+    int h;
+    int bearing_x;
+    int bearing_y;
+    int advance;
 };
 
 

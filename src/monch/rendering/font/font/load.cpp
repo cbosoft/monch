@@ -44,11 +44,11 @@ void Font::load_char_from_font(unsigned long charcode)
 
     this->chars[charcode] = new Character({
         texture,
-        uint(this->_face->glyph->bitmap.width) / 10,
-        uint(this->_face->glyph->bitmap.rows) / 10,
-        uint(this->_face->glyph->bitmap_left) / 10,
-        uint(this->_face->glyph->bitmap_top) / 10,
-        uint(this->_face->glyph->advance.x) / (1 << 6) / 10
+        int(this->_face->glyph->bitmap.width) / 10,
+        int(this->_face->glyph->bitmap.rows) / 10,
+        int(this->_face->glyph->bitmap_left) / 10,
+        int(this->_face->glyph->bitmap_top) / 10,
+        int(this->_face->glyph->advance.x) / (1 << 6) / 10
     });
 
     // restore unpack alignment

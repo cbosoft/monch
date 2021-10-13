@@ -14,8 +14,11 @@ EditorApp::EditorApp()
     ,   _width{0}
     ,   _height{0}
     ,   _event_thread{nullptr}
+    ,   _text_area{nullptr}
 {
     Renderer::ref().get_window_size(_width, _height);
+    _text_area = new TextArea(this);
+    _text_area->set_position({10, 200});
 }
 
 
@@ -98,6 +101,7 @@ void EditorApp::character_input(char32_t ch)
     unicode_char_to_cstr conv = {0};
     conv.unicode_codepoint = ch;
     std::cerr << conv.cstr;
+    _text_area->add_char(ch);
 }
 
 int EditorApp::get_width() const

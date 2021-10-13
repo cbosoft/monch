@@ -7,6 +7,7 @@
 
 #include <thread>
 #include <atomic>
+#include <monch/editor/text_area/TextArea.h>
 
 #include "monch/rendering/renderable/Renderable.h"
 
@@ -42,6 +43,10 @@ protected:
 private:
     EditorApp();
 
+    // editor actions
+    void backspace();
+    void enter();
+
     void key_pressed(int key, int mods);
     void key_released(int key, int mods);
     void character_input(char32_t ch);
@@ -55,6 +60,7 @@ private:
     friend void window_size_callback(GLFWwindow *win, int width, int height);
 
     std::thread *_event_thread;
+    TextArea *_text_area;
 };
 
 
