@@ -6,7 +6,7 @@
 
 #include "monch/rendering/gl.h"
 #include "Renderer.h"
-#include <monch/rendering/window/Window.h>
+#include <monch/editor/app/EditorApp.h>
 #include "shaders.h"
 
 Renderer::Renderer()
@@ -71,7 +71,7 @@ void Renderer::init()
 
 NormalisedPoint Renderer::convert_window_to_normal(const WindowPoint &pt)
 {
-    auto &win = Window::ref();
+    auto &win = EditorApp::ref();
     float x = float(pt.x)/float(win.get_width())*2.f - 1.f, y = float(pt.y)/float(win.get_height())*2.f - 1.f;
     return {x, y};
 }

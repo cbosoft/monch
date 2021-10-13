@@ -2,8 +2,8 @@
 // Created by Christopher Boyle on 12/10/2021.
 //
 
-#ifndef MONCH_WINDOW_H
-#define MONCH_WINDOW_H
+#ifndef MONCH_EDITORAPP_H
+#define MONCH_EDITORAPP_H
 
 
 #include <atomic>
@@ -21,10 +21,10 @@ union unicode_char_to_cstr {
 class GLFWwindow;
 
 
-class Window final: public Renderable {
+class EditorApp final: public Renderable {
 public:
-    static Window &ref();
-    ~Window() final;
+    static EditorApp &ref();
+    ~EditorApp() final;
 
     void run();
 
@@ -38,7 +38,7 @@ protected:
     void after_children_rendered() final;
 
 private:
-    Window();
+    EditorApp();
 
     void key_pressed(int key, int mods);
     void key_released(int key, int mods);
@@ -54,4 +54,4 @@ private:
 };
 
 
-#endif //MONCH_WINDOW_H
+#endif //MONCH_EDITORAPP_H

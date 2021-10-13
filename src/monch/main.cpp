@@ -3,7 +3,7 @@
 #include "monch/rendering/vertex_buffer/VertexBuffer.h"
 #include "monch/rendering/gl.h"
 #include "monch/rendering/renderer/Renderer.h"
-#include "monch/rendering/window/Window.h"
+#include <monch/editor/app/EditorApp.h>
 #include <monch/rendering/font/manager/FontManager.h>
 #include <monch/rendering/font/font/Font.h>
 
@@ -73,8 +73,8 @@ public:
     BlockOfText(Renderable *parent, const std::string &text)
         : Renderable(parent)
     {
-        uint scrx = 0, scry = 300;
-        Font *font = FontManager::ref().get_font("iosevka-regular.ttf", 100);
+        uint scrx = 10, scry = 220;
+        Font *font = FontManager::ref().get_font("iosevka-regular.ttf", 50);
         for (char ch : text) {
             auto *rc = new RenderedCharacter(this, font->get_char(ch), scrx, scry);
             (void) rc;
@@ -89,8 +89,8 @@ public:
 
 int main()
 {
-    Window &win = Window::ref();
-    auto *sq = new BlockOfText(&win, "foo");
+    EditorApp &win = EditorApp::ref();
+    auto *sq = new BlockOfText(&win, "edo, edit: to eat");
     (void) sq;
     win.run();
 }

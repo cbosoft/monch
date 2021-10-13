@@ -5,7 +5,7 @@
 #include <iostream>
 
 #include <monch/rendering/renderer/Renderer.h>
-#include <monch/rendering/window/Window.h>
+#include <monch/editor/app/EditorApp.h>
 #include <monch/rendering/gl.h>
 
 #include "VertexBuffer.h"
@@ -95,7 +95,7 @@ void VertexBuffer::sync_gl() const
 
 void VertexBuffer::draw()
 {
-    if (Window::ref().has_resized()) rescale();
+    if (EditorApp::ref().has_resized()) rescale();
     glBindBuffer(GL_ARRAY_BUFFER, _id);
     glBindVertexArray(_va);
     glDrawArrays(GL_TRIANGLE_FAN, 0, int(_vertices.size()));

@@ -5,10 +5,10 @@
 
 #include "monch/rendering/gl.h"
 #include "monch/rendering/renderer/Renderer.h"
-#include "Window.h"
+#include "EditorApp.h"
 
 
-Window::Window()
+EditorApp::EditorApp()
     :   _should_quit(false)
     ,   _has_resized(false)
 {
@@ -16,21 +16,21 @@ Window::Window()
 }
 
 
-Window::~Window()
+EditorApp::~EditorApp()
 {
     // Close OpenGL window and terminate GLFW
     glfwTerminate();
 }
 
 
-Window &Window::ref()
+EditorApp &EditorApp::ref()
 {
-    static Window window;
+    static EditorApp window;
     return window;
 }
 
 
-void Window::run()
+void EditorApp::run()
 {
     // TODO launch event thread
     while (!_should_quit) {
@@ -40,7 +40,7 @@ void Window::run()
 }
 
 
-void Window::render_me()
+void EditorApp::render_me()
 {
     // Clear color buffer to black
     glClearColor(0.f, 0.f, 0.f, 0.f);
@@ -48,21 +48,21 @@ void Window::render_me()
 }
 
 
-void Window::after_children_rendered()
+void EditorApp::after_children_rendered()
 {
     Renderer::ref().swap_and_poll();
     _has_resized = false;
 }
 
 
-void Window::key_pressed(int key, int mods)
+void EditorApp::key_pressed(int key, int mods)
 {
     if (key == GLFW_KEY_ESCAPE) {
         _should_quit = true;
     }
 }
 
-void Window::key_released(int key, int mods)
+void EditorApp::key_released(int key, int mods)
 {
     (void) key;
     (void) mods;
@@ -70,7 +70,7 @@ void Window::key_released(int key, int mods)
     // TODO?
 }
 
-void Window::character_input(char32_t ch)
+void EditorApp::character_input(char32_t ch)
 {
     (void)this;
     unicode_char_to_cstr conv = {0};
@@ -78,22 +78,22 @@ void Window::character_input(char32_t ch)
     std::cerr << conv.cstr;
 }
 
-int Window::get_width() const
+int EditorApp::get_width() const
 {
     return _width;
 }
 
-int Window::get_height() const
+int EditorApp::get_height() const
 {
     return _height;
 }
 
-bool Window::has_resized() const
+bool EditorApp::has_resized() const
 {
     return _has_resized;
 }
 
-void Window::resized(int width, int height)
+void EditorApp::resized(int width, int height)
 {
     _width = width;
     _height = height;
