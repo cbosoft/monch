@@ -9,8 +9,11 @@
 
 
 EditorApp::EditorApp()
-    :   _should_quit(false)
-    ,   _has_resized(false)
+    :   _should_quit{false}
+    ,   _has_resized{false}
+    ,   _width{0}
+    ,   _height{0}
+    ,   _event_thread{nullptr}
 {
     Renderer::ref().get_window_size(_width, _height);
 }
@@ -18,6 +21,13 @@ EditorApp::EditorApp()
 
 EditorApp::~EditorApp()
 {
+    if (_event_thread) {
+        // Stop event thread
+        stop();
+        _event_thread->join();
+        delete _event_thread;
+    }
+
     // Close OpenGL window and terminate GLFW
     glfwTerminate();
 }
@@ -32,10 +42,12 @@ EditorApp &EditorApp::ref()
 
 void EditorApp::run()
 {
-    // TODO launch event thread
+    const double framerate = 30.;
+    const uint update_period_ms = uint(1e3/framerate);
+    _event_thread = new std::thread([this](){this->process_events();});
     while (!_should_quit) {
-        process_one_event();
         render();
+        std::this_thread::sleep_for(std::chrono::milliseconds(update_period_ms));
     }
 }
 

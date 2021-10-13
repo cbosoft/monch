@@ -5,7 +5,7 @@
 #ifndef MONCH_EDITORAPP_H
 #define MONCH_EDITORAPP_H
 
-
+#include <thread>
 #include <atomic>
 
 #include "monch/rendering/renderable/Renderable.h"
@@ -51,6 +51,8 @@ private:
     friend void window_key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
     friend void window_character_callback(GLFWwindow *window, unsigned int codepoint);
     friend void window_size_callback(GLFWwindow *win, int width, int height);
+
+    std::thread *_event_thread;
 };
 
 
