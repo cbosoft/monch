@@ -28,9 +28,6 @@ public:
 
     void run();
 
-    void key_pressed(int key, int mods);
-    void key_released(int key, int mods);
-    void character_input(char32_t ch);
     [[nodiscard]] int get_width() const;
     [[nodiscard]] int get_height() const;
 
@@ -42,14 +39,18 @@ protected:
 
 private:
     Window();
-    void init();
 
-    GLFWwindow *_glfw_window;
+    void key_pressed(int key, int mods);
+    void key_released(int key, int mods);
+    void character_input(char32_t ch);
+    void resized(int width, int height);
 
     std::atomic_bool _should_quit, _has_resized;
     int _width, _height;
 
-    friend void window_size_callback(GLFWwindow *win, int wid, int hgt);
+    friend void window_key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
+    friend void window_character_callback(GLFWwindow *window, unsigned int codepoint);
+    friend void window_size_callback(GLFWwindow *win, int width, int height);
 };
 
 

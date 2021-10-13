@@ -12,6 +12,10 @@
 #include <monch/rendering/gl.h>
 #include <monch/rendering/vertex_buffer/VertexBuffer.h>
 
+void window_key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
+void window_character_callback(GLFWwindow *window, unsigned int codepoint);
+void window_size_callback(GLFWwindow *window, int width, int height);
+
 class Renderable;
 class Renderer {
 public:
@@ -20,7 +24,9 @@ public:
     Renderer(const Renderer &) =delete;
     Renderer &operator=(const Renderer &) =delete;
 
-    GLFWwindow *init_window();
+    void init();
+
+    void swap_and_poll() const;
 
     void use_assigned_shader(Renderable *rbl);
     void assign_shader(Renderable *rbl, const std::string &name);
@@ -29,9 +35,11 @@ public:
 
     static NormalisedPoint convert_window_to_normal(const WindowPoint &pt);
 
+    void get_window_size(int &width, int &height) const;
+
 private:
 
-    Renderer() =default;
+    Renderer();
 
     void load_shader_program(const std::string &vertex_source, const std::string &fragment_source, const std::string &name);
     static uint compile_shader(const std::string &source, int shader_type);
@@ -42,6 +50,9 @@ private:
 
     std::map<Renderable *, uint> _assigned_shaders;
     std::map<std::string, uint> _shaders;
+
+    GLFWwindow *_glfw_window;
+    int _width, _height;
 
     // TODO: merge rendering stuff from window into here
 };

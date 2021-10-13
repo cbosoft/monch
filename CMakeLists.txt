@@ -62,6 +62,6 @@ add_executable(${PROJECT_NAME} src/monch/main.cpp src/monch/object/Object.cpp sr
         src/monch/rendering/font/manager/ctor.cpp
         src/monch/rendering/font/manager/dtor.cpp
         src/monch/rendering/font/manager/singleton.cpp
-        )
+        src/monch/rendering/renderer/input_callbacks.cpp)
 target_link_libraries(${PROJECT_NAME} PUBLIC ${GLFW_LIB} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${EXTRA_LIBS})
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_SOURCE_DIR}/src" ${OPENGL_INCLUDE_DIR} ${GLFW_INCLUDE_DIR} ${GLEW_INCLUDE_DIR})

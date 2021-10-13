@@ -9,11 +9,10 @@
 
 
 Window::Window()
-    :   _glfw_window{nullptr}
-    ,   _should_quit(false)
+    :   _should_quit(false)
     ,   _has_resized(false)
 {
-    init();
+    Renderer::ref().get_window_size(_width, _height);
 }
 
 
@@ -28,57 +27,6 @@ Window &Window::ref()
 {
     static Window window;
     return window;
-}
-
-static void window_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-    (void) window;
-    (void) scancode;
-    switch (action) {
-        case GLFW_PRESS:
-            Window::ref().key_pressed(key, mods);
-            break;
-        case GLFW_RELEASE:
-            Window::ref().key_released(key, mods);
-            break;
-        default:
-        case GLFW_REPEAT:
-            break;
-    }
-}
-
-static void window_character_callback(GLFWwindow* window, unsigned int codepoint)
-{
-    (void) window;
-    Window::ref().character_input(codepoint);
-}
-
-
-void window_size_callback(GLFWwindow *notused, int wid, int hgt)
-{
-    (void) notused;
-    auto &win = Window::ref();
-    win._width = wid;
-    win._height = hgt;
-    win._has_resized = true;
-    win.render();
-}
-
-
-void Window::init()
-{
-    // Open a window and create its OpenGL context
-    _glfw_window = Renderer::ref().init_window();
-
-    // enable vsync
-    glfwSwapInterval(1);
-
-    // register input callbacks
-    glfwSetKeyCallback(_glfw_window, &window_key_callback);
-    glfwSetCharCallback(_glfw_window, &window_character_callback);
-
-    glfwGetWindowSize(_glfw_window, &_width, &_height);
-    glfwSetWindowSizeCallback(_glfw_window, &window_size_callback);
 }
 
 
@@ -102,8 +50,7 @@ void Window::render_me()
 
 void Window::after_children_rendered()
 {
-    glfwSwapBuffers(_glfw_window);
-    glfwPollEvents();
+    Renderer::ref().swap_and_poll();
     _has_resized = false;
 }
 
@@ -144,4 +91,12 @@ int Window::get_height() const
 bool Window::has_resized() const
 {
     return _has_resized;
+}
+
+void Window::resized(int width, int height)
+{
+    _width = width;
+    _height = height;
+    _has_resized = true;
+    render();
 }
