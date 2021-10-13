@@ -10,6 +10,7 @@ Object::Object(Object *parent)
     :   _is_event_loop_running{false}
     ,   _should_stop_event_loop{false}
     ,   _parent{parent}
+    ,   _has_changed_position{false}
 {
     set_parent(parent);
 }
@@ -17,7 +18,7 @@ Object::Object(Object *parent)
 
 Object::~Object()
 {
-    stop();
+
 }
 
 
@@ -42,21 +43,18 @@ void Object::process_one_event()
             give_event(event);
         }
     }
-
-    for (Object *child : *this) {
-        child->process_one_event();
-    }
 }
 
 
 void Object::process_events()
 {
-    _is_event_loop_running = true;
-    while (!_should_stop_event_loop) {
+    for (uint i = 0; i < _events.size(); i++)
         process_one_event();
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+
+    for (Object *child : *this) {
+        child->process_events();
     }
-    _is_event_loop_running = false;
 }
 
 
@@ -77,15 +75,6 @@ void Object::give_event(Event *event)
     if (!event) return;
     std::lock_guard<std::mutex> _l(_m);
     _events.push_back(event);
-}
-
-
-void Object::stop()
-{
-    _should_stop_event_loop = true;
-    while (_is_event_loop_running) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    }
 }
 
 
@@ -124,4 +113,20 @@ ConstObjectIter Object::begin() const
 ConstObjectIter Object::end() const
 {
     return _children.end();
+}
+
+bool Object::has_changed_position() const
+{
+    if (_has_changed_position)
+        return true;
+
+    if (_parent && _parent->has_changed_position())
+        return true;
+
+    return false;
+}
+
+void Object::set_not_moved()
+{
+    _has_changed_position = false;
 }

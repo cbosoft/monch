@@ -9,10 +9,57 @@ typedef unsigned int uint;
 
 struct WindowPoint {
     uint x, y;
+
+    WindowPoint operator+(const WindowPoint &o) const
+    {
+        return {this->x+o.x, this->y+o.y};
+    }
+
+    WindowPoint &operator+=(const WindowPoint &o)
+    {
+        this->x += o.x;
+        this->y += o.y;
+        return *this;
+    }
+
+    WindowPoint operator-(const WindowPoint &o) const
+    {
+        return {this->x-o.x, this->y-o.y};
+    }
+
+    WindowPoint &operator-=(const WindowPoint &o)
+    {
+        this->x -= o.x;
+        this->y -= o.y;
+        return *this;
+    }
 };
 
 struct NormalisedPoint {
     float x, y;
+
+    NormalisedPoint operator+(const NormalisedPoint &o) const
+    {
+        return {this->x+o.x, this->y+o.y};
+    }
+
+    NormalisedPoint &operator+=(const NormalisedPoint &o)
+    {
+        this->x += o.x;
+        this->y += o.y;
+        return *this;
+    }
+    NormalisedPoint operator-(const NormalisedPoint &o) const
+    {
+        return {this->x-o.x, this->y-o.y};
+    }
+
+    NormalisedPoint &operator-=(const NormalisedPoint &o)
+    {
+        this->x -= o.x;
+        this->y -= o.y;
+        return *this;
+    }
 };
 
 #endif //MONCH_UTIL_H
