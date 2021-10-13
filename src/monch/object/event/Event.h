@@ -14,7 +14,7 @@ public:
     virtual ~Event() =default;
 
     virtual bool should_run() { return true; };
-    virtual void run(Object *object) =0;
+    virtual bool run(Object *object) =0;
 
 };
 

@@ -21,17 +21,23 @@ Object::~Object()
 }
 
 
-bool Object::process_one_event()
+void Object::process_one_event()
 {
     Event *event = get_next_event();
 
-    bool rv = false;
     if (event != nullptr) {
 
         if (event->should_run()) {
-            event->run(this);
-            delete event;
-            rv = true;
+
+            // Run event. Is it finished?
+            if (event->run(this)) {
+                // finished, safe to delete it
+                delete event;
+            }
+            else {
+                // not finished, need to process it again later
+                give_event(event);
+            }
         } else {
             give_event(event);
         }
@@ -40,7 +46,6 @@ bool Object::process_one_event()
     for (Object *child : *this) {
         child->process_one_event();
     }
-    return rv;
 }
 
 

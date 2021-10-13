@@ -23,7 +23,7 @@ public:
     Object &operator=(const Object &) =delete;
 
     void process_events();
-    bool process_one_event();
+    void process_one_event();
 
     void give_event(Event *event);
     void stop();
