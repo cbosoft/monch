@@ -11,13 +11,13 @@
 #include "VertexBuffer.h"
 
 
-VertexBuffer::VertexBuffer(const std::vector<WindowPoint> &points)
+VertexBuffer::VertexBuffer(uint n)
     :   _id{0}
-    ,   _unscaled(points)
+    ,   _va{0}
+    ,   _unscaled(n)
 {
-    for (const auto &pt : points) {
-        NormalisedPoint n_pt = Renderer::convert_window_to_normal(pt);
-        _vertices.push_back({.x=n_pt.x, .y=n_pt.y, .z=0., .r=1., .g=1., .b=1., .a=1., .s=0., .t=0.});
+    for (uint i = 0; i < n; i++) {
+        _vertices.push_back({.x=0, .y=0, .z=0., .r=1., .g=1., .b=1., .a=1., .s=0., .t=0.});
     }
     glGenBuffers(1, &_id);
     sync_gl();

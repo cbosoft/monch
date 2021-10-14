@@ -22,7 +22,7 @@ RenderedCharacter::RenderedCharacter(Object *parent, char32_t ch, Font *font)
     _bearing_y = c->bearing_y;
     _advance = c->advance;
     _texture_id = c->texture_id;
-    _vbuff = new VertexBuffer({ {0, 0}, {_w, 0}, {_w, _h}, {0, _h}});
+    _vbuff = new VertexBuffer(4);
     _vbuff->set_tex_coords({{0, 1}, {1, 1}, {1, 0}, {0, 0}});
 }
 

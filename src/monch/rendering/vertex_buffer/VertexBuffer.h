@@ -19,7 +19,7 @@ struct Vertex {
 class VertexBuffer {
 public:
 
-    VertexBuffer(const std::vector<WindowPoint> &points);
+    explicit VertexBuffer(uint n);
     ~VertexBuffer();
 
     void draw();
