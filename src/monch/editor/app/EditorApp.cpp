@@ -58,8 +58,9 @@ void EditorApp::run()
     const double framerate = 30.;
     const uint update_period_ms = uint(1e3/framerate);
     _event_thread = new std::thread([this](){this->event_thread_loop();});
+    auto &renderer = Renderer::ref();
     while (!_should_quit) {
-        render();
+        renderer.render(this);
         std::this_thread::sleep_for(std::chrono::milliseconds(update_period_ms));
     }
 }

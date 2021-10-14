@@ -86,3 +86,18 @@ void Renderer::get_window_size(int &width, int &height) const
 {
     glfwGetWindowSize(_glfw_window, &width, &height);
 }
+
+void Renderer::render(Object *obj)
+{
+    if (obj->is_a("Renderable")) {
+        ((Renderable *)obj)->render();
+    }
+
+    for (auto *child : *obj) {
+        render(child);
+    }
+
+    if (obj->is_a("Renderable")) {
+        ((Renderable *)obj)->after_children_rendered();
+    }
+}

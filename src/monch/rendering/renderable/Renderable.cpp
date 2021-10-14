@@ -7,25 +7,13 @@
 Renderable::Renderable(Object *parent)
     :   Object(parent)
 {
-    add_type("renderable");
+    add_type("Renderable");
 }
 
 void Renderable::render()
 {
     render_me();
-    render_children();
-    after_children_rendered();
     set_not_moved();
-}
-
-void Renderable::render_children()
-{
-    for (auto *child : *this)
-    {
-        if (child->is_a("renderable")) {
-            ((Renderable *) child)->render();
-        }
-    }
 }
 
 void Renderable::after_children_rendered()

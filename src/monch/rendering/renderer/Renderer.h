@@ -11,6 +11,7 @@
 #include <monch/util.h>
 #include <monch/rendering/gl.h>
 #include <monch/rendering/vertex_buffer/VertexBuffer.h>
+#include <monch/object/Object.h>
 
 void window_key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
 void window_character_callback(GLFWwindow *window, unsigned int codepoint);
@@ -36,6 +37,8 @@ public:
     static NormalisedPoint convert_window_to_normal(const WindowPoint &pt);
 
     void get_window_size(int &width, int &height) const;
+
+    void render(Object *obj);
 
 private:
 

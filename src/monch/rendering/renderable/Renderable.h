@@ -19,7 +19,6 @@ protected:
     void render();
 
 private:
-    void render_children();
 
     friend class Renderer;
 
