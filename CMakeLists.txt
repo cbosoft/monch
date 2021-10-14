@@ -53,7 +53,22 @@ configure_file("${CMAKE_SOURCE_DIR}/src/monch/rendering/font/manager/font_path.h
 
 ########################################################################################################################
 ## Main
-add_executable(${PROJECT_NAME} src/monch/main.cpp src/monch/object/Object.cpp src/monch/object/event/Event.cpp src/monch/rendering/renderer/Renderer.cpp src/monch/editor/app/EditorApp.cpp src/monch/rendering/renderable/Renderable.cpp src/monch/rendering/renderable/Renderable.h src/monch/util.h src/monch/rendering/renderer/shaders.cpp src/monch/rendering/gl.h src/monch/rendering/renderable/quad/Quad.cpp src/monch/rendering/renderable/quad/Quad.h src/monch/rendering/vertex_buffer/VertexBuffer.cpp src/monch/rendering/vertex_buffer/VertexBuffer.h src/monch/rendering/renderer/error.cpp
+add_executable(${PROJECT_NAME}
+        src/monch/main.cpp
+        src/monch/object/Object.cpp
+        src/monch/object/event/Event.cpp
+        src/monch/rendering/renderer/Renderer.cpp
+        src/monch/editor/app/EditorApp.cpp
+        src/monch/rendering/renderable/Renderable.cpp
+        src/monch/rendering/renderable/Renderable.h
+        src/monch/util.h
+        src/monch/rendering/renderer/shaders.cpp
+        src/monch/rendering/gl.h
+        src/monch/rendering/renderable/quad/Quad.cpp
+        src/monch/rendering/renderable/quad/Quad.h
+        src/monch/rendering/vertex_buffer/VertexBuffer.cpp
+        src/monch/rendering/vertex_buffer/VertexBuffer.h
+        src/monch/rendering/renderer/error.cpp
         src/monch/rendering/font/font/ctor.cpp
         src/monch/rendering/font/font/dtor.cpp
         src/monch/rendering/font/font/get.cpp
@@ -62,6 +77,11 @@ add_executable(${PROJECT_NAME} src/monch/main.cpp src/monch/object/Object.cpp sr
         src/monch/rendering/font/manager/ctor.cpp
         src/monch/rendering/font/manager/dtor.cpp
         src/monch/rendering/font/manager/singleton.cpp
-        src/monch/rendering/renderer/input_callbacks.cpp src/monch/object/position.cpp src/monch/editor/app/editor_actions.cpp src/monch/editor/text_area/TextArea.cpp src/monch/editor/text_area/TextArea.h src/monch/editor/rendered_character/RenderedCharacter.cpp src/monch/editor/rendered_character/RenderedCharacter.h)
+        src/monch/rendering/renderer/input_callbacks.cpp
+        src/monch/object/position.cpp
+        src/monch/editor/text_area/TextArea.cpp
+        src/monch/editor/text_area/TextArea.h
+        src/monch/editor/rendered_character/RenderedCharacter.cpp
+        src/monch/editor/rendered_character/RenderedCharacter.h)
 target_link_libraries(${PROJECT_NAME} PUBLIC ${GLFW_LIB} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${EXTRA_LIBS})
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_SOURCE_DIR}/src" ${OPENGL_INCLUDE_DIR} ${GLFW_INCLUDE_DIR} ${GLEW_INCLUDE_DIR})

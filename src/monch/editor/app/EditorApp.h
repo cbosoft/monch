@@ -43,10 +43,6 @@ protected:
 private:
     EditorApp();
 
-    // editor actions
-    void backspace();
-    void enter();
-
     void key_pressed(int key, int mods);
     void key_released(int key, int mods);
     void character_input(char32_t ch);

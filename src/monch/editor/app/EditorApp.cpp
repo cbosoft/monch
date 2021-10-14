@@ -18,7 +18,7 @@ EditorApp::EditorApp()
 {
     Renderer::ref().get_window_size(_width, _height);
     _text_area = new TextArea(this);
-    _text_area->set_position({10, 200});
+    _text_area->set_position({0, _height-20});
 }
 
 
@@ -83,8 +83,30 @@ void EditorApp::after_children_rendered()
 
 void EditorApp::key_pressed(int key, int mods)
 {
-    if (key == GLFW_KEY_ESCAPE) {
-        _should_quit = true;
+    (void) mods;
+    switch (key) {
+        case GLFW_KEY_ESCAPE:
+            _should_quit = true;
+            break;
+
+        case GLFW_KEY_ENTER:
+            _text_area->newline();
+            break;
+
+        case GLFW_KEY_BACKSPACE:
+            _text_area->backspace();
+            break;
+
+        case GLFW_KEY_LEFT:
+            _text_area->decrement_cursor_position();
+            break;
+
+        case GLFW_KEY_RIGHT:
+            _text_area->increment_cursor_position();
+            break;
+
+        default:
+            break;
     }
 }
 
@@ -125,5 +147,6 @@ void EditorApp::resized(int width, int height)
     _width = width;
     _height = height;
     _has_resized = true;
+    _text_area->set_relative_position({0, _height-20});
     render();
 }
