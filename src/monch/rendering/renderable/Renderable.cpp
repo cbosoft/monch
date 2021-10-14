@@ -7,7 +7,7 @@
 Renderable::Renderable(Object *parent)
     :   Object(parent)
 {
-    add_type("Renderable");
+    add_type<Renderable>();
 }
 
 void Renderable::render()

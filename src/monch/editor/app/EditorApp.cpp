@@ -16,6 +16,7 @@ EditorApp::EditorApp()
     ,   _event_thread{nullptr}
     ,   _text_area{nullptr}
 {
+    add_type<EditorApp>();
     Renderer::ref().get_window_size(_width, _height);
     _text_area = new TextArea(this);
     _text_area->set_position({0, _height-20});

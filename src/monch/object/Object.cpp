@@ -13,7 +13,7 @@ Object::Object(Object *parent)
     ,   _has_changed_position{false}
     ,   _rel_pos({0, 0})
 {
-    add_type("object");
+    add_type<Object>();
     set_parent(parent);
 }
 
@@ -149,22 +149,36 @@ void Object::set_not_moved()
     _has_changed_position = false;
 }
 
+
 void Object::add_type(std::size_t hsh)
 {
     _types.push_back(hsh);
 }
 
-void Object::add_type(const std::string &type_key)
-{
-    add_type(std::hash<std::string>{}(type_key));
-}
-
-bool Object::is_a(const std::string &type)
-{
-    return is_a(std::hash<std::string>{}(type));
-}
 
 bool Object::is_a(std::size_t hsh)
 {
     return std::any_of(_types.begin(), _types.end(), [hsh](std::size_t ohsh) -> bool {return ohsh==hsh;});
+}
+
+
+Object *Object::_find_in_children(std::size_t type_hsh)
+{
+    for (auto *child : *this) {
+        if (child->is_a(type_hsh)) {
+            return child;
+        }
+    }
+    // TODO recursively find in children?
+    return nullptr;
+}
+
+
+Object *Object::_find_in_parents(std::size_t type_hsh)
+{
+    if (!_parent) return nullptr;
+
+    if (_parent->is_a(type_hsh)) return _parent;
+
+    return _parent->_find_in_parents(type_hsh);
 }

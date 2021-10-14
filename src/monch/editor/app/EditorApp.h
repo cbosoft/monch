@@ -23,6 +23,7 @@ class GLFWwindow;
 
 
 class EditorApp final: public Renderable {
+    MONCH_OBJECT("EditorApp")
 public:
     static EditorApp &ref();
     ~EditorApp() final;

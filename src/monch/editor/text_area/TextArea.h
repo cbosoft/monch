@@ -12,6 +12,7 @@
 class Font;
 class RenderedCharacter;
 class TextArea final: public Renderable {
+    MONCH_OBJECT("TextArea")
 public:
     explicit TextArea(Object *parent);
 

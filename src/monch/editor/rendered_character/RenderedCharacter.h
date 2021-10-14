@@ -11,6 +11,7 @@
 #include <monch/rendering/font/manager/FontManager.h>
 
 class RenderedCharacter final: public Renderable {
+    MONCH_OBJECT("RenderedCharacter")
 public:
 
     RenderedCharacter(Object *parent, char32_t ch, Font *font);

@@ -13,7 +13,7 @@ RenderedCharacter::RenderedCharacter(Object *parent, char32_t ch, Font *font)
         ,   _font{font}
         ,   _char{ch}
 {
-    add_type("RenderedCharacter");
+    add_type<RenderedCharacter>();
     Renderer::ref().assign_shader(this, "font");
     Character *c = font->get_char(ch);
     _w = c->w;

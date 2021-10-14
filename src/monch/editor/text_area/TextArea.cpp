@@ -10,7 +10,7 @@ TextArea::TextArea(Object *parent)
     ,   _cursor_position{0}
     ,   _font{nullptr}
 {
-    add_type("text area");
+    add_type<TextArea>();
     _font = FontManager::ref().get_font("iosevka-regular.ttf", 16);
     _cursor = new RenderedCharacter(this, U'\u258f', _font);
 }
@@ -50,7 +50,7 @@ void TextArea::add_char(char32_t c)
 
     auto *rchar = new RenderedCharacter(root, c, _font);
 
-    if (root->is_a("RenderedCharacter")) {
+    if (root->is_a<RenderedCharacter>()) {
         rchar->set_relative_position({((RenderedCharacter *)root)->get_advance(), 0});
     }
     else {

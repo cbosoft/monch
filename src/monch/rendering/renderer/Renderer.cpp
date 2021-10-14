@@ -89,7 +89,7 @@ void Renderer::get_window_size(int &width, int &height) const
 
 void Renderer::render(Object *obj)
 {
-    if (obj->is_a("Renderable")) {
+    if (obj->is_a<Renderable>()) {
         ((Renderable *)obj)->render();
     }
 
@@ -97,7 +97,7 @@ void Renderer::render(Object *obj)
         render(child);
     }
 
-    if (obj->is_a("Renderable")) {
+    if (obj->is_a<Renderable>()) {
         ((Renderable *)obj)->after_children_rendered();
     }
 }

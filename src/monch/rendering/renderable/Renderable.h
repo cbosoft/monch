@@ -8,6 +8,7 @@
 #include "monch/object/Object.h"
 
 class Renderable: public Object {
+    MONCH_OBJECT("Renderable")
 public:
 
     explicit Renderable(Object *parent=nullptr);

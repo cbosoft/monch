@@ -15,8 +15,17 @@ class Object;
 typedef std::list<Object *>::iterator ObjectIter;
 typedef std::list<Object *>::const_iterator ConstObjectIter;
 
+#define MONCH_OBJECT(TYPENAME) \
+public:\
+static std::size_t type_hash() \
+{\
+    static std::size_t hsh = std::hash<std::string>{}(TYPENAME);\
+    return hsh; \
+}
+
 // generic object; reciever of events and such
 class Object {
+    MONCH_OBJECT("Object")
 public:
     explicit Object(Object *parent=nullptr);
     virtual ~Object();
@@ -33,6 +42,24 @@ public:
     void add_child(Object *object);
     void remove_child(Object *object);
 
+    template<typename T>
+    T *find_in_children()
+    {
+        return (T *)_find_in_children(T::type_hash());
+    }
+
+    template<typename T>
+    T *find_in_parents()
+    {
+        return (T *)_find_in_parents(T::type_hash());
+    }
+
+    template<typename T>
+    bool is_a()
+    {
+        return is_a(T::type_hash());
+    }
+
     ConstObjectIter begin() const;
     ConstObjectIter end() const;
 
@@ -48,15 +75,20 @@ public:
 
     [[nodiscard]] bool has_changed_position() const;
 
-    bool is_a(const std::string &type);
-
 protected:
     void set_not_moved();
-    void add_type(const std::string &type_key);
+
+    template<typename T>
+    void add_type()
+    {
+        add_type(T::type_hash());
+    }
 
 private:
-    bool is_a(std::size_t hsh);
     void add_type(std::size_t hsh);
+    bool is_a(std::size_t hsh);
+    Object *_find_in_children(std::size_t hash);
+    Object *_find_in_parents(std::size_t hash);
 
     Event *get_next_event();
     std::mutex _m;
