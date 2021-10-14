@@ -29,6 +29,7 @@ public:
     void give_event(Event *event);
 
     void set_parent(Object *object);
+    void insert_parent(Object *parent);
     void add_child(Object *object);
     void remove_child(Object *object);
 

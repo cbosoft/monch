@@ -20,7 +20,9 @@ Object::Object(Object *parent)
 
 Object::~Object()
 {
-
+    if (_parent) {
+        _parent->remove_child(this);
+    }
 }
 
 
@@ -82,13 +84,27 @@ void Object::give_event(Event *event)
 
 void Object::set_parent(Object *object)
 {
+    if (_parent) {
+        _parent->remove_child(this);
+    }
+    if (object == this) throw std::runtime_error("object cannot be parent of itself");
     _parent = object;
+    _has_changed_position = true;
     if (object != nullptr)
         object->add_child(this);
 }
 
+void Object::insert_parent(Object *new_parent)
+{
+    if (new_parent) {
+        new_parent->set_parent(_parent);
+    }
+    set_parent(new_parent);
+}
+
 void Object::add_child(Object *object)
 {
+    if (object == this) throw std::runtime_error("object cannot be child of itself");
     _children.push_back(object);
     auto existing_child_it = std::find(_children.begin(), _children.end(), object);
     if (existing_child_it == _children.end()) {
