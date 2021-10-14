@@ -39,7 +39,11 @@ public:
     [[nodiscard]] WindowPoint get_position() const;
     void set_position(const WindowPoint &pos);
     [[nodiscard]] WindowPoint get_relative_position() const;
+    [[nodiscard]] WindowPoint get_relative_position(const std::string &relative_to) const;
+    [[nodiscard]] WindowPoint get_relative_position(std::size_t relative_to_hsh) const;
     void set_relative_position(const WindowPoint &rel_pos);
+    void set_relative_position(const WindowPoint &rel_pos, const std::string &relative_to);
+    void set_relative_position(const WindowPoint &rel_pos, std::size_t relative_to_hsh);
     void increment_position(const WindowPoint &delta);
 
     [[nodiscard]] bool has_changed_position() const;

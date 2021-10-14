@@ -28,10 +28,40 @@ WindowPoint Object::get_relative_position() const
     return _rel_pos;
 }
 
+WindowPoint Object::get_relative_position(const std::string &relative_to) const
+{
+    return get_relative_position(std::hash<std::string>{}(relative_to));
+}
+
+WindowPoint Object::get_relative_position(std::size_t relative_to_hsh) const
+{
+    if (!_parent) {
+        throw std::runtime_error("can't get relative pos; no parent of that type found");
+    }
+
+    if (_parent->is_a(relative_to_hsh)) {
+        return _rel_pos;
+    }
+    else {
+        return WindowPoint(_rel_pos) + _parent->get_relative_position(relative_to_hsh);
+    }
+}
+
 void Object::set_relative_position(const WindowPoint &rel_pos)
 {
     _rel_pos = rel_pos;
     _has_changed_position = true;
+}
+
+void Object::set_relative_position(const WindowPoint &rel_pos, const std::string &relative_to)
+{
+    set_relative_position(rel_pos, std::hash<std::string>{}(relative_to));
+}
+
+void Object::set_relative_position(const WindowPoint &rel_pos, std::size_t relative_to_hsh)
+{
+    WindowPoint diff = get_relative_position(relative_to_hsh);
+    _rel_pos = rel_pos - diff;
 }
 
 void Object::increment_position(const WindowPoint &delta)
