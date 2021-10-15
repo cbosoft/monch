@@ -59,6 +59,8 @@ public:
 
     void give_event(Event *event);
 
+    [[nodiscard]] bool has_parent() const;
+    [[nodiscard]] Object *get_parent() const;
     void set_parent(Object *object);
     void insert_parent(Object *parent);
     void add_child(Object *object);
@@ -105,6 +107,8 @@ protected:
     {
         add_type(T::type_hash());
     }
+
+    uint _id;
 
 private:
     void add_type(std::size_t hsh);

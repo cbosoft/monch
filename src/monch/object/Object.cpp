@@ -85,6 +85,18 @@ void Object::give_event(Event *event)
 }
 
 
+Object *Object::get_parent() const
+{
+    return _parent;
+}
+
+
+bool Object::has_parent() const
+{
+    return _parent != nullptr;
+}
+
+
 void Object::set_parent(Object *object)
 {
     if (_parent) {
