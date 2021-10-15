@@ -90,17 +90,25 @@ public:
     [[nodiscard]] WindowPoint get_position() const;
     void set_position(const WindowPoint &pos);
     [[nodiscard]] WindowPoint get_relative_position() const;
-    [[nodiscard]] WindowPoint get_relative_position(const std::string &relative_to) const;
-    [[nodiscard]] WindowPoint get_relative_position(std::size_t relative_to_hsh) const;
     void set_relative_position(const WindowPoint &rel_pos);
-    void set_relative_position(const WindowPoint &rel_pos, const std::string &relative_to);
-    void set_relative_position(const WindowPoint &rel_pos, std::size_t relative_to_hsh);
     void increment_position(const WindowPoint &delta);
 
+    template<typename T>
+    void set_relative_position(const WindowPoint &rel_pos)
+    {
+        set_relative_position(rel_pos, T::type_hash());
+    }
+
+    template<typename T>
+    [[nodiscard]] WindowPoint get_relative_position() const
+    {
+        return get_relative_position(T::type_hash());
+    }
+
     [[nodiscard]] bool has_changed_position() const;
+    void set_not_moved();
 
 protected:
-    void set_not_moved();
 
     template<typename T>
     void add_type()
@@ -115,6 +123,8 @@ private:
     bool is_a(std::size_t hsh);
     Object *_find_in_children(std::size_t hash);
     Object *_find_in_parents(std::size_t hash);
+    [[nodiscard]] WindowPoint get_relative_position(std::size_t relative_to_hsh) const;
+    void set_relative_position(const WindowPoint &rel_pos, std::size_t relative_to_hsh);
 
     Event *get_next_event();
     std::mutex _m;
