@@ -2,17 +2,20 @@
 // Created by Christopher Boyle on 13/10/2021.
 //
 
+#include <iostream>
+
 #include <monch/editor/rendered_character/RenderedCharacter.h>
 #include "TextArea.h"
 
-TextArea::TextArea(Object *parent)
-    : Renderable(parent)
+TextArea::TextArea(Object *parent, int w, int h)
+    :   Container(parent, w, h)
     ,   _cursor_position{0}
     ,   _font{nullptr}
 {
     add_type<TextArea>();
     _font = FontManager::ref().get_font("iosevka-regular.ttf", 16);
     _cursor = new RenderedCharacter(this, U'\u258f', _font);
+    reposition_cursor();
 }
 
 void TextArea::increment_cursor_position()
@@ -39,7 +42,7 @@ void TextArea::reposition_cursor()
     }
     else {
         _cursor->set_parent(this);
-        _cursor->set_relative_position({0, 0});
+        _cursor->set_relative_position({0, get_height() - 20});
     }
 }
 
@@ -54,7 +57,7 @@ void TextArea::add_char(char32_t c)
         rchar->set_relative_position({((RenderedCharacter *)root)->get_advance(), 0});
     }
     else {
-        rchar->set_relative_position({0, 0});
+        rchar->set_relative_position({0, get_height() - 20});
     }
 
     if (_cursor_position < (int(_rendered_characters.size()) - 1)) {
@@ -65,11 +68,6 @@ void TextArea::add_char(char32_t c)
     _text.insert(_text.begin() + _cursor_position, c);
     _rendered_characters.insert(_rendered_characters.begin()+_cursor_position, rchar);
     increment_cursor_position();
-}
-
-void TextArea::render_me()
-{
-    // do nothing (rendering is handled in characters)
 }
 
 void TextArea::backspace()
@@ -101,7 +99,7 @@ void TextArea::newline()
     auto *nl = new RenderedCharacter(this, ' ', _font);
     Object *root = this;
     if (_cursor_position) root = _rendered_characters[_cursor_position-1];
-    nl->set_position({0, root->get_position().y-20});
+    nl->set_relative_position<TextArea>({0, root->get_position().y-20});
     _text.insert(_text.begin() + _cursor_position, '\n');
     _rendered_characters.insert(_rendered_characters.begin()+_cursor_position, nl);
 

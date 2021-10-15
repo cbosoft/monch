@@ -16,10 +16,11 @@ struct Vertex {
     float s, t;
 };
 
+class Renderable;
 class VertexBuffer {
 public:
 
-    explicit VertexBuffer(uint n);
+    explicit VertexBuffer(Renderable *owner, uint n);
     ~VertexBuffer();
 
     void draw();
@@ -36,6 +37,7 @@ private:
     uint _id, _va;
     std::vector<WindowPoint> _unscaled;
     std::vector<Vertex> _vertices;
+    Renderable *_owner;
 
 };
 

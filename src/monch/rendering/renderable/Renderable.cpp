@@ -12,8 +12,7 @@ Renderable::Renderable(Object *parent)
 
 void Renderable::render()
 {
-    render_me();
-    set_not_moved();
+    render_me(); // TODO merge render() and render_me()
 }
 
 void Renderable::after_children_rendered()

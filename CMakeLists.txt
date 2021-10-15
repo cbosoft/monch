@@ -10,6 +10,8 @@ file(READ "shaders/fragment/fragment.glsl" FRAGMENT_SHADER_SOURCE_MULTILINE)
 string(REPLACE "\n" "\\n\\\n" FRAGMENT_SHADER_SOURCE "${FRAGMENT_SHADER_SOURCE_MULTILINE}")
 file(READ "shaders/fragment/font.glsl" FONT_SHADER_SOURCE_MULTILINE)
 string(REPLACE "\n" "\\n\\\n" FONT_SHADER_SOURCE "${FONT_SHADER_SOURCE_MULTILINE}")
+file(READ "shaders/fragment/texture.glsl" TEXTURE_SHADER_SOURCE_MULTILINE)
+string(REPLACE "\n" "\\n\\\n" TEXTURE_SHADER_SOURCE "${TEXTURE_SHADER_SOURCE_MULTILINE}")
 configure_file("${CMAKE_SOURCE_DIR}/src/monch/rendering/renderer/shaders.h.in" "${CMAKE_SOURCE_DIR}/src/monch/rendering/renderer/shaders.h")
 
 ########################################################################################################################
@@ -82,6 +84,6 @@ add_executable(${PROJECT_NAME}
         src/monch/editor/text_area/TextArea.cpp
         src/monch/editor/text_area/TextArea.h
         src/monch/editor/rendered_character/RenderedCharacter.cpp
-        src/monch/editor/rendered_character/RenderedCharacter.h)
+        src/monch/editor/rendered_character/RenderedCharacter.h src/monch/rendering/container/Container.cpp src/monch/rendering/container/Container.h)
 target_link_libraries(${PROJECT_NAME} PUBLIC ${GLFW_LIB} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${EXTRA_LIBS})
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_SOURCE_DIR}/src" ${OPENGL_INCLUDE_DIR} ${GLFW_INCLUDE_DIR} ${GLEW_INCLUDE_DIR})

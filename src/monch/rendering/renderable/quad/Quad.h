@@ -5,16 +5,23 @@
 #ifndef MONCH_QUAD_H
 #define MONCH_QUAD_H
 
-#include "monch/rendering/renderable/Renderable.h"
+#include <monch/rendering/renderable/Renderable.h>
+#include <monch/rendering/vertex_buffer/VertexBuffer.h>
 
 class Quad: public Renderable {
+
+    MONCH_OBJECT("Quad")
 public:
-    Quad(int x, int y, int w, int h);
+    Quad(Object *parent, int x, int y, int w, int h);
 
     void render_me() override;
 
+    void set_colour(float r, float g, float b);
+
     int x, y, w, h;
 
+private:
+    VertexBuffer _vbuff;
 };
 
 

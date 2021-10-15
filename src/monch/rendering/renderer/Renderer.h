@@ -38,9 +38,10 @@ public:
 
     void get_window_size(int &width, int &height) const;
 
-    void render(Object *obj);
+    void render(Object *root);
 
 private:
+    void _recursive_render(Object *obj);
 
     Renderer();
 

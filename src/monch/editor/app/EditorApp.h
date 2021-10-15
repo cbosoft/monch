@@ -9,7 +9,7 @@
 #include <atomic>
 #include <monch/editor/text_area/TextArea.h>
 
-#include "monch/rendering/renderable/Renderable.h"
+#include <monch/rendering/container/Container.h>
 
 
 union unicode_char_to_cstr {
@@ -22,7 +22,7 @@ union unicode_char_to_cstr {
 class GLFWwindow;
 
 
-class EditorApp final: public Renderable {
+class EditorApp final: public Container {
     MONCH_OBJECT("EditorApp")
 public:
     static EditorApp &ref();
@@ -30,16 +30,9 @@ public:
 
     void run();
 
-    [[nodiscard]] int get_width() const;
-    [[nodiscard]] int get_height() const;
-
     [[nodiscard]] bool has_resized() const;
 
     void event_thread_loop();
-
-protected:
-    void render_me() final;
-    void after_children_rendered() final;
 
 private:
     EditorApp();
@@ -49,8 +42,9 @@ private:
     void character_input(char32_t ch);
     void resized(int width, int height);
 
+    void post_render() final;
+
     std::atomic_bool _should_quit, _has_resized;
-    int _width, _height;
 
     friend void window_key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
     friend void window_character_callback(GLFWwindow *window, unsigned int codepoint);

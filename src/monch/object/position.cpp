@@ -28,11 +28,6 @@ WindowPoint Object::get_relative_position() const
     return _rel_pos;
 }
 
-WindowPoint Object::get_relative_position(const std::string &relative_to) const
-{
-    return get_relative_position(std::hash<std::string>{}(relative_to));
-}
-
 WindowPoint Object::get_relative_position(std::size_t relative_to_hsh) const
 {
     if (!_parent) {
@@ -51,11 +46,6 @@ void Object::set_relative_position(const WindowPoint &rel_pos)
 {
     _rel_pos = rel_pos;
     _has_changed_position = true;
-}
-
-void Object::set_relative_position(const WindowPoint &rel_pos, const std::string &relative_to)
-{
-    set_relative_position(rel_pos, std::hash<std::string>{}(relative_to));
 }
 
 void Object::set_relative_position(const WindowPoint &rel_pos, std::size_t relative_to_hsh)

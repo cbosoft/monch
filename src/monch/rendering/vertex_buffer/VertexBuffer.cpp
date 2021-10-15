@@ -4,6 +4,7 @@
 
 #include <iostream>
 
+#include <monch/rendering/renderable/Renderable.h>
 #include <monch/rendering/renderer/Renderer.h>
 #include <monch/editor/app/EditorApp.h>
 #include <monch/rendering/gl.h>
@@ -11,14 +12,17 @@
 #include "VertexBuffer.h"
 
 
-VertexBuffer::VertexBuffer(uint n)
+VertexBuffer::VertexBuffer(Renderable *owner, uint n)
     :   _id{0}
     ,   _va{0}
     ,   _unscaled(n)
+    ,   _owner{owner}
 {
     for (uint i = 0; i < n; i++) {
         _vertices.push_back({.x=0, .y=0, .z=0., .r=1., .g=1., .b=1., .a=1., .s=0., .t=0.});
     }
+
+    Renderer::ref().error_check("vbuff ctor (start)");
     glGenBuffers(1, &_id);
     sync_gl();
     glGenVertexArrays(1, &_va);
@@ -43,16 +47,7 @@ void VertexBuffer::set_points(const std::vector<WindowPoint> &points)
 {
     if (points.size() != _vertices.size()) return;
     _unscaled = points;
-    auto it_v = _vertices.begin();
-    auto it_p = points.begin();
-    for (; it_v != _vertices.end(); it_v++, it_p++) {
-        auto &vertex = *it_v;
-        const auto &pt = *it_p;
-        NormalisedPoint n_pt = Renderer::convert_window_to_normal(pt);
-        vertex.x = n_pt.x;
-        vertex.y = n_pt.y;
-    }
-    sync_gl();
+    rescale();
 }
 
 
@@ -95,7 +90,7 @@ void VertexBuffer::sync_gl() const
 
 void VertexBuffer::draw()
 {
-    if (EditorApp::ref().has_resized()) rescale();
+    /*if (necessary) rescale(); */
     glBindBuffer(GL_ARRAY_BUFFER, _id);
     glBindVertexArray(_va);
     glDrawArrays(GL_TRIANGLE_FAN, 0, int(_vertices.size()));
@@ -105,12 +100,22 @@ void VertexBuffer::draw()
 
 void VertexBuffer::rescale()
 {
+
     auto it_v = _vertices.begin();
     auto it_p = _unscaled.begin();
+    Container *c = nullptr;
+    if (_owner->has_parent()) {
+        c = _owner->find_in_parents<Container>();
+    }
+    else {
+        // no parent, owner must be container (app)
+        c = (Container *)_owner;
+    }
     for (; it_v != _vertices.end(); it_v++, it_p++) {
         auto &vertex = *it_v;
         const auto &pt = *it_p;
-        NormalisedPoint n_pt = Renderer::convert_window_to_normal(pt);
+
+        NormalisedPoint n_pt = c->get_norm(pt);
         vertex.x = n_pt.x;
         vertex.y = n_pt.y;
     }

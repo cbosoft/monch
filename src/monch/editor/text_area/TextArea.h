@@ -7,18 +7,16 @@
 
 #include <vector>
 #include <map>
-#include <monch/rendering/renderable/Renderable.h>
+#include <monch/rendering/container/Container.h>
 
 class Font;
 class RenderedCharacter;
-class TextArea final: public Renderable {
+class TextArea final: public Container {
     MONCH_OBJECT("TextArea")
 public:
-    explicit TextArea(Object *parent);
+    explicit TextArea(Object *parent, int w, int h);
 
     void add_char(char32_t c);
-
-    void render_me() final;
 
     void backspace();
     void newline();

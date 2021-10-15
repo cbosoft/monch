@@ -47,12 +47,17 @@ void Renderer::init()
         throw std::runtime_error("Failed to init GLEW.");
 #endif
 
+    float x_scale, y_scale;
+    glfwGetWindowContentScale(win, &x_scale, &y_scale);
+    std::cerr << x_scale << " " << y_scale << std::endl;
+
     glfwMakeContextCurrent(win);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     load_shader_program(VERTEX_SHADER_SOURCE, FRAGMENT_SHADER_SOURCE, "default");
     load_shader_program(VERTEX_SHADER_SOURCE, FONT_SHADER_SOURCE, "font");
+    load_shader_program(VERTEX_SHADER_SOURCE, TEXTURE_SHADER_SOURCE, "texture");
 
     error_check("Renderer::init() -> after load shaders");
     _glfw_window = win;
@@ -76,28 +81,37 @@ NormalisedPoint Renderer::convert_window_to_normal(const WindowPoint &pt)
     return {x, y};
 }
 
-void Renderer::swap_and_poll() const
-{
-    glfwSwapBuffers(_glfw_window);
-    glfwPollEvents();
-}
 
 void Renderer::get_window_size(int &width, int &height) const
 {
     glfwGetWindowSize(_glfw_window, &width, &height);
 }
 
-void Renderer::render(Object *obj)
+
+void Renderer::render(Object *root)
+{
+    glClearColor(0, 0, 0, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    _recursive_render(root);
+    glfwSwapBuffers(_glfw_window);
+    glfwPollEvents();
+}
+
+void Renderer::_recursive_render(Object *obj)
 {
     if (obj->is_a<Renderable>()) {
         ((Renderable *)obj)->render();
     }
 
     for (auto *child : *obj) {
-        render(child);
+        _recursive_render(child);
     }
 
     if (obj->is_a<Renderable>()) {
-        ((Renderable *)obj)->after_children_rendered();
+        auto *rbl = (Renderable *)obj;
+        rbl->after_children_rendered();
+        rbl->post_render();
     }
+
+    obj->set_not_moved();
 }

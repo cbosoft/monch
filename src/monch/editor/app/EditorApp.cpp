@@ -9,17 +9,19 @@
 
 
 EditorApp::EditorApp()
-    :   _should_quit{false}
+    :   Container(nullptr, 1, 1)
+    ,   _should_quit{false}
     ,   _has_resized{false}
-    ,   _width{0}
-    ,   _height{0}
     ,   _event_thread{nullptr}
     ,   _text_area{nullptr}
 {
     add_type<EditorApp>();
-    Renderer::ref().get_window_size(_width, _height);
-    _text_area = new TextArea(this);
-    _text_area->set_position({0, _height-20});
+    int w, h;
+    Renderer::ref().get_window_size(w, h);
+    set_size(w, h);
+    _text_area = new TextArea(this, w, h);
+    _text_area->set_colour(0.1, 0.1, 0.1);
+    _text_area->set_position({0, 0});
 }
 
 
@@ -58,26 +60,18 @@ void EditorApp::run()
 {
     const double framerate = 30.;
     const uint update_period_ms = uint(1e3/framerate);
-    _event_thread = new std::thread([this](){this->event_thread_loop();});
+    //_event_thread = new std::thread([this](){this->event_thread_loop();});
     auto &renderer = Renderer::ref();
     while (!_should_quit) {
         renderer.render(this);
+        this->process_events();
         std::this_thread::sleep_for(std::chrono::milliseconds(update_period_ms));
     }
 }
 
 
-void EditorApp::render_me()
+void EditorApp::post_render()
 {
-    // Clear color buffer to black
-    glClearColor(0.f, 0.f, 0.f, 0.f);
-    glClear(GL_COLOR_BUFFER_BIT);
-}
-
-
-void EditorApp::after_children_rendered()
-{
-    Renderer::ref().swap_and_poll();
     _has_resized = false;
 }
 
@@ -128,16 +122,6 @@ void EditorApp::character_input(char32_t ch)
     _text_area->add_char(ch);
 }
 
-int EditorApp::get_width() const
-{
-    return _width;
-}
-
-int EditorApp::get_height() const
-{
-    return _height;
-}
-
 bool EditorApp::has_resized() const
 {
     return _has_resized;
@@ -145,9 +129,8 @@ bool EditorApp::has_resized() const
 
 void EditorApp::resized(int width, int height)
 {
-    _width = width;
-    _height = height;
+    set_size(width, height);
+    _text_area->set_size(width, height);
     _has_resized = true;
-    _text_area->set_relative_position({0, _height-20});
-    render();
+    // render();
 }
