@@ -7,6 +7,7 @@
 
 #include <list>
 #include <mutex>
+#include <sstream>
 
 #include <monch/util.h>
 #include "event/Event.h"
@@ -15,17 +16,38 @@ class Object;
 typedef std::list<Object *>::iterator ObjectIter;
 typedef std::list<Object *>::const_iterator ConstObjectIter;
 
+#define MONCH_OBJECT_BASE(TYPENAME) \
+public:\
+static std::size_t type_hash() \
+{\
+    static std::size_t hsh = std::hash<std::string>{}(TYPENAME);\
+    return hsh; \
+}\
+[[nodiscard]] virtual std::string get_id() const\
+{\
+    std::stringstream ss;\
+    ss << (TYPENAME) << "(" << _id << ")";\
+    return ss.str();\
+}
+
 #define MONCH_OBJECT(TYPENAME) \
 public:\
 static std::size_t type_hash() \
 {\
     static std::size_t hsh = std::hash<std::string>{}(TYPENAME);\
     return hsh; \
+}\
+[[nodiscard]] std::string get_id() const override\
+{\
+    std::stringstream ss;\
+    ss << (TYPENAME) << "(" << _id << ")";\
+    return ss.str();\
 }
+
 
 // generic object; reciever of events and such
 class Object {
-    MONCH_OBJECT("Object")
+    MONCH_OBJECT_BASE("Object")
 public:
     explicit Object(Object *parent=nullptr);
     virtual ~Object();

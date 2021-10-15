@@ -5,12 +5,15 @@
 #include "Object.h"
 #include <thread>
 
+static uint idcounter = 0;
+
 
 Object::Object(Object *parent)
-    :   _is_event_loop_running{false}
+    :   _id{idcounter++}
+    ,   _is_event_loop_running{false}
     ,   _should_stop_event_loop{false}
     ,   _parent{parent}
-    ,   _has_changed_position{false}
+    ,   _has_changed_position{true}
     ,   _rel_pos({0, 0})
 {
     add_type<Object>();
