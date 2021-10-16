@@ -2,15 +2,17 @@
 // Created by Christopher Boyle on 12/10/2021.
 //
 
-#include "Object.h"
 #include <thread>
+#include <monch/rendering/container/Container.h>
+#include "Object.h"
 
 static uint idcounter = 0;
 
 
 Object::Object(Object *parent)
     :   _id{idcounter++}
-    ,   _parent{parent}
+    ,   _parent{nullptr}
+    ,   _container{nullptr}
     ,   _has_invalid_position_scale{true}
     ,   _rel_pos({0, 0})
 {
@@ -43,6 +45,18 @@ bool Object::has_parent() const
 }
 
 
+bool Object::has_container() const
+{
+    return _container != nullptr;
+}
+
+
+Container *Object::get_container() const
+{
+    return _container;
+}
+
+
 void Object::set_parent(Object *object)
 {
     if (_parent) {
@@ -50,6 +64,7 @@ void Object::set_parent(Object *object)
     }
     if (object == this) throw std::runtime_error("object cannot be parent of itself");
     _parent = object;
+    _container = find_in_parents<Container>();
     if (object != nullptr)
         object->add_child(this);
     invalidate_position_scale();

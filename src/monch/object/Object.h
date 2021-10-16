@@ -44,6 +44,7 @@ static std::size_t type_hash() \
     return ss.str();\
 }
 
+class Container;
 
 // generic object; reciever of events and such
 class Object {
@@ -56,6 +57,8 @@ public:
 
     [[nodiscard]] bool has_parent() const;
     [[nodiscard]] Object *get_parent() const;
+    [[nodiscard]] bool has_container() const;
+    [[nodiscard]] Container *get_container() const;
     void set_parent(Object *object);
     void insert_parent(Object *parent);
     void add_child(Object *object);
@@ -82,10 +85,14 @@ public:
     ConstObjectIter begin() const;
     ConstObjectIter end() const;
 
+    [[nodiscard]] WindowPoint get_absolute_position() const;
+    void set_absolute_position(const WindowPoint &pos);
     [[nodiscard]] WindowPoint get_position() const;
     void set_position(const WindowPoint &pos);
     [[nodiscard]] WindowPoint get_relative_position() const;
     void set_relative_position(const WindowPoint &rel_pos);
+    [[nodiscard]] WindowPoint get_relative_position(const Object *relto) const;
+    void set_relative_position(const WindowPoint &rel_pos, const Object *relto);
     void increment_position(const WindowPoint &delta);
 
     template<typename T>
@@ -126,6 +133,7 @@ private:
     std::atomic_bool _has_invalid_position_scale;
 
     Object *_parent;
+    Container *_container;
     std::list<Object *> _children;
     std::list<std::size_t> _types;
 };

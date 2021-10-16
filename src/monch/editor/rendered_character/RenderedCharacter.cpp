@@ -50,13 +50,7 @@ void RenderedCharacter::render()
 
 void RenderedCharacter::update_vbuff_points()
 {
-    WindowPoint pt = {0, 0};
-    if (has_parent()) {
-        pt = get_relative_position<Container>();
-    }
-    else {
-        pt = get_position();
-    }
+    WindowPoint pt = get_position();
     int x = pt.x + _bearing_x, y = pt.y + _bearing_y - _h;
     _vbuff->set_points({ {x, y}, {x + _w, y}, {x + _w, y + _h}, {x, y + _h}});
 }

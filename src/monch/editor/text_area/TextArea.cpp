@@ -105,7 +105,7 @@ void TextArea::newline()
     auto *nl = new RenderedCharacter(this, ' ', _font);
     Object *root = _topleft;
     if (_cursor_position) root = _rendered_characters[_cursor_position-1];
-    nl->set_relative_position<TextArea>({0, root->get_position().y-20});
+    nl->set_relative_position<TextArea>({0, root->get_absolute_position().y - 20});
     _text.insert(_text.begin() + _cursor_position, '\n');
     _rendered_characters.insert(_rendered_characters.begin()+_cursor_position, nl);
 

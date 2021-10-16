@@ -111,11 +111,11 @@ void VertexBuffer::rescale()
     auto it_v = _vertices.begin();
     auto it_p = _unscaled.begin();
     Container *c = nullptr;
-    if (_owner->has_parent()) {
-        c = _owner->find_in_parents<Container>();
+    if (_owner->has_container()) {
+        c = _owner->get_container();
     }
     else {
-        // no parent, owner must be container (app)
+        // no container; obj is its own container
         c = (Container *)_owner;
     }
     for (; it_v != _vertices.end(); it_v++, it_p++) {

@@ -100,7 +100,7 @@ void Container::after_children_rendered()
             pt = get_relative_position<Container>();
         }
         else {
-            pt = get_position();
+            pt = get_absolute_position();
         }
         _vbuff.set_points({{pt.x, pt.y}, {pt.x+_w, pt.y}, {pt.x+_w, pt.y+_h}, {pt.x, pt.y+_h}});
     }
