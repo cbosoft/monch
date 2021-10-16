@@ -95,9 +95,8 @@ void TextArea::backspace()
     auto it_char = _rendered_characters.begin() + (_cursor_position - 1);
     auto *rchar = *it_char;
     _rendered_characters.erase(it_char);
-    delete rchar;
-
     decrement_cursor_position();
+    delete rchar;
 }
 
 void TextArea::newline()
