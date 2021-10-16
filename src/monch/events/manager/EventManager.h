@@ -27,6 +27,7 @@ public:
 
 protected:
     long loop_delay_ms;
+    std::mutex objects_mutex;
 
 private:
     void process_one_event();

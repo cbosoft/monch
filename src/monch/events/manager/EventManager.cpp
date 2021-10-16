@@ -36,7 +36,7 @@ void EventManager::process_one_event()
     if (event != nullptr) {
 
         if (event->should_run() ) {
-
+            std::lock_guard<std::mutex> _l(objects_mutex);
             // Run event. Is it finished?
             if (event->run(obj)) {
                 // finished, safe to delete it

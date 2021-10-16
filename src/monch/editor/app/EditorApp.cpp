@@ -52,7 +52,10 @@ void EditorApp::run()
     _event_thread = new std::thread([this](){ this->run_event_loop();});
     auto &renderer = Renderer::ref();
     while (!_should_quit) {
-        renderer.render(this);
+        {
+            std::lock_guard<std::mutex> _l(objects_mutex);
+            renderer.render(this);
+        }
         //run_through_events_once();
         std::this_thread::sleep_for(std::chrono::milliseconds(update_period_ms));
     }
