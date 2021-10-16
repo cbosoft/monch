@@ -8,6 +8,7 @@
 #include "Renderer.h"
 #include <monch/editor/app/EditorApp.h>
 #include "shaders.h"
+#include <monch/rendering/renderer/title_bar/titlebar.h>
 
 Renderer::Renderer()
     :   _glfw_window{nullptr}
@@ -61,6 +62,10 @@ void Renderer::init()
 
     error_check("Renderer::init() -> after load shaders");
     _glfw_window = win;
+
+#ifdef MACOS
+    set_title_bar_colour(win, 0.1, 0.1, 0.1);
+#endif
 
     // enable vsync
     glfwSwapInterval(1);

@@ -38,14 +38,18 @@ if (${CMAKE_SYSTEM_NAME} STREQUAL Darwin)
     list(APPEND EXT_LIB "-framework OpenGL")
     set(FONT_PATH "$ENV{HOME}/Library/Fonts")
     set(FONT_FALLBACK_PATH "/System/Library/Fonts")
+    set(TITLEBAR_SOURCE "src/monch/rendering/renderer/title_bar/macos.mm")
+    set_property(SOURCE src/monch/rendering/renderer/title_bar/macos.mm PROPERTY COMPILE_FLAGS "-x objective-c++")
 elseif(${CMAKE_SYSTEM_NAME} STREQUAL Linux)
     message("System is Linux.")
     list(APPEND EXTRA_LIBS X11)
     add_compile_definitions(LINUX)
+    set(TITLEBAR_SOURCE "src/monch/rendering/renderer/title_bar/x11.cpp")
 elseif(${CMAKE_SYSTEM_NAME} STREQUAL WINDOWS)
     message("System is Windows.")
     set(GLFW_LIB glfw3)
     add_compile_definitions(WINDOWS)
+    set(TITLEBAR_SOURCE "src/monch/rendering/renderer/title_bar/windows.cpp")
 else()
     message("UNKNOWN SYSTEM!")
 endif()
@@ -84,6 +88,10 @@ add_executable(${PROJECT_NAME}
         src/monch/editor/text_area/TextArea.cpp
         src/monch/editor/text_area/TextArea.h
         src/monch/editor/rendered_character/RenderedCharacter.cpp
-        src/monch/editor/rendered_character/RenderedCharacter.h src/monch/rendering/container/Container.cpp src/monch/rendering/container/Container.h)
+        src/monch/editor/rendered_character/RenderedCharacter.h
+        src/monch/rendering/container/Container.cpp
+        src/monch/rendering/container/Container.h
+        ${TITLEBAR_SOURCE})
+
 target_link_libraries(${PROJECT_NAME} PUBLIC ${GLFW_LIB} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${EXTRA_LIBS})
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_SOURCE_DIR}/src" ${OPENGL_INCLUDE_DIR} ${GLFW_INCLUDE_DIR} ${GLEW_INCLUDE_DIR})
