@@ -33,13 +33,13 @@ public:
 private:
 
     void init();
-    void sync_gl() const;
+    void sync_gl();
 
     uint _id, _va;
     std::vector<WindowPoint> _unscaled;
     std::vector<Vertex> _vertices;
     Renderable *_owner;
-    std::atomic_bool _is_init;
+    std::atomic_bool _is_init, _sync_needed;
 
 };
 
