@@ -33,6 +33,7 @@ public:
     [[nodiscard]] bool has_resized() const;
 
     void event_thread_loop();
+    void render() final;
 
 private:
     EditorApp();
@@ -44,7 +45,7 @@ private:
 
     void post_render() final;
 
-    std::atomic_bool _should_quit, _has_resized;
+    std::atomic_bool _should_quit, _has_resized, _has_changes;
 
     friend void window_key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
     friend void window_character_callback(GLFWwindow *window, unsigned int codepoint);
@@ -52,6 +53,7 @@ private:
 
     std::thread *_event_thread;
     TextArea *_text_area;
+    std::chrono::time_point<std::chrono::system_clock> _time_last_render;
 };
 
 

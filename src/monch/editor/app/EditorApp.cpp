@@ -14,6 +14,7 @@ EditorApp::EditorApp()
     ,   _has_resized{false}
     ,   _event_thread{nullptr}
     ,   _text_area{nullptr}
+    ,   _has_changes{false}
 {
     add_type<EditorApp>();
     int w, h;
@@ -69,6 +70,24 @@ void EditorApp::run()
     }
 }
 
+void EditorApp::render()
+{
+    bool should_render = _has_changes;
+    if (!should_render) {
+        long millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - _time_last_render).count();
+        if (millis > 1000) {
+            // if its been a while, force re-render
+            should_render = true;
+        }
+    }
+
+    if (should_render) {
+        Container::render();
+        _time_last_render = std::chrono::system_clock::now();
+        _has_changes = false;
+    }
+}
+
 
 void EditorApp::post_render()
 {
@@ -86,18 +105,22 @@ void EditorApp::key_pressed(int key, int mods)
 
         case GLFW_KEY_ENTER:
             _text_area->newline();
+            _has_changes = true;
             break;
 
         case GLFW_KEY_BACKSPACE:
             _text_area->backspace();
+            _has_changes = true;
             break;
 
         case GLFW_KEY_LEFT:
             _text_area->decrement_cursor_position();
+            _has_changes = true;
             break;
 
         case GLFW_KEY_RIGHT:
             _text_area->increment_cursor_position();
+            _has_changes = true;
             break;
 
         default:
@@ -116,10 +139,8 @@ void EditorApp::key_released(int key, int mods)
 void EditorApp::character_input(char32_t ch)
 {
     (void)this;
-    unicode_char_to_cstr conv = {0};
-    conv.unicode_codepoint = ch;
-    std::cerr << conv.cstr;
     _text_area->add_char(ch);
+    _has_changes = true;
 }
 
 bool EditorApp::has_resized() const
