@@ -14,13 +14,12 @@ Container::Container(Object *parent, int w, int h)
     ,   _r{0}
     ,   _g{0}
     ,   _b{0}
-    ,   _w{w}
-    ,   _h{h}
     ,   _vbuff{this, 4}
     ,   _fbuff{0}
     ,   _txtr{0}
 {
     add_type<Container>();
+    Object::set_size(w, h);
     glGenFramebuffers(1, &_fbuff);
     glGenTextures(1, &_txtr);
     Renderer::ref().assign_shader(this, "texture");
@@ -28,19 +27,10 @@ Container::Container(Object *parent, int w, int h)
     _vbuff.set_tex_coords({{0, 0}, {1, 0}, {1, 1}, {0, 1}});
 }
 
-void Container::set_size(int w, int h)
-{
-    _w = w;
-    _h = h;
-    invalidate_position_scale();
-}
-
-int Container::get_width() const { return _w; }
-int Container::get_height() const { return _h; }
-
 void Container::render()
 {
-    int W = _w*2, H = _h*2;
+    WindowPoint sz = get_size();
+    int W = sz.x*2, H = sz.y*2;
 
     // change render target: texture
     glBindFramebuffer(GL_FRAMEBUFFER, _fbuff);
@@ -81,11 +71,15 @@ void Container::after_children_rendered()
 //        of << "\n";
 //    }
 
+
+
     // change back to on-screen rendering, or render to parent fbuff
-    if (has_parent()) {
-        auto *c = find_in_parents<Container>();
+    if (has_container()) {
+        auto *c = get_container();
         glBindFramebuffer(GL_FRAMEBUFFER, c->_fbuff);
-        glViewport(0, 0, c->_w*2, c->_h*2);
+        WindowPoint sz = c->get_size();
+        int W = sz.x*2, H = sz.y*2;
+        glViewport(0, 0, W, H);
     }
     else {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -102,7 +96,8 @@ void Container::after_children_rendered()
         else {
             pt = get_absolute_position();
         }
-        _vbuff.set_points({{pt.x, pt.y}, {pt.x+_w, pt.y}, {pt.x+_w, pt.y+_h}, {pt.x, pt.y+_h}});
+        WindowPoint sz = get_size();
+        _vbuff.set_points({{pt.x, pt.y}, {pt.x+sz.x, pt.y}, {pt.x+sz.x, pt.y+sz.y}, {pt.x, pt.y+sz.y}});
     }
     _vbuff.draw();
 }
@@ -112,15 +107,11 @@ void Container::set_colour(float r, float g, float b)
     _r = r; _b = b; _g = g;
 }
 
-WindowPoint Container::get_size() const
-{
-    return {_w, _h};
-}
-
 NormalisedPoint Container::get_norm(const WindowPoint &pt) const
 {
     // map pixel point (x, y) to range ([-1, 1], [-1, 1])
-    auto nx = float(pt.x*2)/float(_w) - 1.f;
-    auto ny = float(pt.y*2)/float(_h) - 1.f;
+    WindowPoint sz = get_size();
+    auto nx = float(pt.x*2)/float(sz.x) - 1.f;
+    auto ny = float(pt.y*2)/float(sz.y) - 1.f;
     return {nx, ny};
 }

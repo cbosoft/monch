@@ -74,6 +74,10 @@ public:
     ConstObjectIter begin() const;
     ConstObjectIter end() const;
 
+    [[nodiscard]] int get_width() const;
+    [[nodiscard]] int get_height() const;
+    [[nodiscard]] WindowPoint get_size() const;
+    virtual void set_size(int width, int height);
     [[nodiscard]] WindowPoint get_absolute_position() const;
     void set_absolute_position(const WindowPoint &pos);
     [[nodiscard]] WindowPoint get_position() const;
@@ -118,7 +122,8 @@ private:
     [[nodiscard]] WindowPoint get_relative_position(std::size_t relative_to_hsh) const;
     void set_relative_position(const WindowPoint &rel_pos, std::size_t relative_to_hsh);
 
-    std::atomic<WindowPoint> _rel_pos;
+    std::atomic<WindowPoint> _rel_pos; // relative to parent
+    std::atomic<WindowPoint> _size;
     std::atomic_bool _has_invalid_position_scale;
 
     Object *_parent;

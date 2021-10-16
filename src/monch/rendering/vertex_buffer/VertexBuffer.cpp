@@ -107,7 +107,6 @@ void VertexBuffer::draw()
 
 void VertexBuffer::rescale()
 {
-
     auto it_v = _vertices.begin();
     auto it_p = _unscaled.begin();
     Container *c = nullptr;

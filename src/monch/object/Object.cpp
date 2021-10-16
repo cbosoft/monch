@@ -15,6 +15,7 @@ Object::Object(Object *parent)
     ,   _container{nullptr}
     ,   _has_invalid_position_scale{true}
     ,   _rel_pos({0, 0})
+    ,   _size({1, 1})
 {
     add_type<Object>();
     set_parent(parent);
