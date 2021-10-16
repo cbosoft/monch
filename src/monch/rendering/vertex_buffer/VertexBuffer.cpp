@@ -17,11 +17,15 @@ VertexBuffer::VertexBuffer(Renderable *owner, uint n)
     ,   _va{0}
     ,   _unscaled(n)
     ,   _owner{owner}
+    ,   _is_init{false}
 {
     for (uint i = 0; i < n; i++) {
         _vertices.push_back({.x=0, .y=0, .z=0., .r=1., .g=1., .b=1., .a=1., .s=0., .t=0.});
     }
+}
 
+void VertexBuffer::init()
+{
     Renderer::ref().error_check("vbuff ctor (start)");
     glGenBuffers(1, &_id);
     sync_gl();
@@ -59,7 +63,7 @@ void VertexBuffer::set_colour(float r, float g, float b, float a)
         vertex.b = b;
         vertex.a = a;
     }
-    sync_gl();
+    //sync_gl();
 }
 
 
@@ -76,7 +80,7 @@ void VertexBuffer::set_tex_coords(const std::vector<NormalisedPoint> &points)
         vertex.s = tex_coord.x;
         vertex.t = tex_coord.y;
     }
-    sync_gl();
+    //sync_gl();
 }
 
 
@@ -90,7 +94,8 @@ void VertexBuffer::sync_gl() const
 
 void VertexBuffer::draw()
 {
-    /*if (necessary) rescale(); */
+    if (!_is_init) init();
+    sync_gl(); // TODO only sync if necessary
     glBindBuffer(GL_ARRAY_BUFFER, _id);
     glBindVertexArray(_va);
     glDrawArrays(GL_TRIANGLE_FAN, 0, int(_vertices.size()));
@@ -119,5 +124,5 @@ void VertexBuffer::rescale()
         vertex.x = n_pt.x;
         vertex.y = n_pt.y;
     }
-    sync_gl();
+    //sync_gl();
 }
