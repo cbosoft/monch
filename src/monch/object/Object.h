@@ -10,7 +10,7 @@
 #include <sstream>
 
 #include <monch/util.h>
-#include "event/Event.h"
+#include "monch/events/event/Event.h"
 
 class Object;
 typedef std::list<Object *>::iterator ObjectIter;
@@ -53,11 +53,6 @@ public:
     virtual ~Object();
     Object(const Object &) =delete;
     Object &operator=(const Object &) =delete;
-
-    void process_events();
-    void process_one_event();
-
-    void give_event(Event *event);
 
     [[nodiscard]] bool has_parent() const;
     [[nodiscard]] Object *get_parent() const;
@@ -127,10 +122,6 @@ private:
     [[nodiscard]] WindowPoint get_relative_position(std::size_t relative_to_hsh) const;
     void set_relative_position(const WindowPoint &rel_pos, std::size_t relative_to_hsh);
 
-    Event *get_next_event();
-    std::mutex _m;
-    std::list<Event *> _events;
-    std::atomic_bool _should_stop_event_loop, _is_event_loop_running;
     std::atomic<WindowPoint> _rel_pos;
     std::atomic_bool _has_invalid_position_scale;
 

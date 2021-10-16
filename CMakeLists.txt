@@ -62,7 +62,6 @@ configure_file("${CMAKE_SOURCE_DIR}/src/monch/rendering/font/manager/font_path.h
 add_executable(${PROJECT_NAME}
         src/monch/main.cpp
         src/monch/object/Object.cpp
-        src/monch/object/event/Event.cpp
         src/monch/rendering/renderer/Renderer.cpp
         src/monch/editor/app/EditorApp.cpp
         src/monch/rendering/renderable/Renderable.cpp
@@ -92,7 +91,10 @@ add_executable(${PROJECT_NAME}
         src/monch/rendering/container/Container.cpp
         src/monch/rendering/container/Container.h
         ${TITLEBAR_SOURCE}
-        src/monch/object/invalidate.cpp)
+        src/monch/object/invalidate.cpp
+        src/monch/events/manager/EventManager.cpp
+        src/monch/events/manager/EventManager.h
+        src/monch/events/event/Event.h)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC ${GLFW_LIB} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${EXTRA_LIBS})
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_SOURCE_DIR}/src" ${OPENGL_INCLUDE_DIR} ${GLFW_INCLUDE_DIR} ${GLEW_INCLUDE_DIR})

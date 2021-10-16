@@ -8,7 +8,7 @@
 #include <thread>
 #include <atomic>
 #include <monch/editor/text_area/TextArea.h>
-
+#include <monch/events/manager/EventManager.h>
 #include <monch/rendering/container/Container.h>
 
 
@@ -22,7 +22,7 @@ union unicode_char_to_cstr {
 class GLFWwindow;
 
 
-class EditorApp final: public Container {
+class EditorApp final: public Container, public EventManager {
     MONCH_OBJECT("EditorApp")
 public:
     static EditorApp &ref();
@@ -32,7 +32,6 @@ public:
 
     [[nodiscard]] bool has_resized() const;
 
-    void event_thread_loop();
     void render() final;
 
 private:

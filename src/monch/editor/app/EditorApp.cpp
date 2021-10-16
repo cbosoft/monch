@@ -45,29 +45,18 @@ EditorApp &EditorApp::ref()
 }
 
 
-void EditorApp::event_thread_loop()
-{
-    const double framerate = 60.;
-    const uint update_period_ms = uint(1e3/framerate);
-    while (!_should_quit)
-    {
-        this->process_events();
-        std::this_thread::sleep_for(std::chrono::milliseconds(update_period_ms));
-    }
-}
-
-
 void EditorApp::run()
 {
     const double framerate = 30.;
     const uint update_period_ms = uint(1e3/framerate);
-    //_event_thread = new std::thread([this](){this->event_thread_loop();});
+    _event_thread = new std::thread([this](){ this->run_event_loop();});
     auto &renderer = Renderer::ref();
     while (!_should_quit) {
         renderer.render(this);
-        this->process_events();
+        //run_through_events_once();
         std::this_thread::sleep_for(std::chrono::milliseconds(update_period_ms));
     }
+    stop_event_loop();
 }
 
 void EditorApp::render()
