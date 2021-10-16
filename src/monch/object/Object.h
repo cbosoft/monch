@@ -64,23 +64,12 @@ public:
     void add_child(Object *object);
     void remove_child(Object *object);
 
-    template<typename T>
-    T *find_in_children()
-    {
-        return (T *)_find_in_children(T::type_hash());
-    }
+    Object *find_in_children(const Object *object) const;
+    Object *find_in_parents(const Object *object) const;
+    template<typename T> T *find_in_children() const { return (T *)_find_in_children(T::type_hash()); }
+    template<typename T> T *find_in_parents() const { return (T *)_find_in_parents(T::type_hash()); }
 
-    template<typename T>
-    T *find_in_parents()
-    {
-        return (T *)_find_in_parents(T::type_hash());
-    }
-
-    template<typename T>
-    bool is_a()
-    {
-        return is_a(T::type_hash());
-    }
+    template<typename T> bool is_a() { return is_a(T::type_hash()); }
 
     ConstObjectIter begin() const;
     ConstObjectIter end() const;
@@ -124,8 +113,8 @@ protected:
 private:
     void add_type(std::size_t hsh);
     bool is_a(std::size_t hsh);
-    Object *_find_in_children(std::size_t hash);
-    Object *_find_in_parents(std::size_t hash);
+    Object *_find_in_children(std::size_t hash) const;
+    Object *_find_in_parents(std::size_t hash) const;
     [[nodiscard]] WindowPoint get_relative_position(std::size_t relative_to_hsh) const;
     void set_relative_position(const WindowPoint &rel_pos, std::size_t relative_to_hsh);
 
