@@ -13,7 +13,7 @@ class Container: public Renderable {
 public:
     Container(Object *parent, int w, int h);
 
-    void render_me() final;
+    void render() override;
     void after_children_rendered() final;
     virtual void set_size(int w, int h);
     [[nodiscard]] WindowPoint get_size() const;

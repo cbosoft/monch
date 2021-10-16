@@ -38,7 +38,7 @@ void Container::set_size(int w, int h)
 int Container::get_width() const { return _w; }
 int Container::get_height() const { return _h; }
 
-void Container::render_me()
+void Container::render()
 {
     int W = _w*2, H = _h*2;
 

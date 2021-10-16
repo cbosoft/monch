@@ -38,7 +38,7 @@ int RenderedCharacter::get_advance() const
     return _advance;
 }
 
-void RenderedCharacter::render_me()
+void RenderedCharacter::render()
 {
     Renderer::ref().use_assigned_shader(this);
     glBindTexture(GL_TEXTURE_2D, _texture_id);

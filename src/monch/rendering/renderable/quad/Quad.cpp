@@ -16,7 +16,7 @@ Quad::Quad(Object *parent, int x, int y, int w, int h)
     Renderer::ref().assign_shader(this, "default");
 }
 
-void Quad::render_me()
+void Quad::render()
 {
     Renderer::ref().use_assigned_shader(this);
     _vbuff.set_points({{x, y}, {x+w, y}, {x+w, y+h}, {x, y+h}});

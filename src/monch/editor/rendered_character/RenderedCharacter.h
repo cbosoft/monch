@@ -18,7 +18,7 @@ public:
 
     ~RenderedCharacter() noexcept override;
 
-    void render_me() final;
+    void render() final;
 
     [[nodiscard]] int get_advance() const;
 

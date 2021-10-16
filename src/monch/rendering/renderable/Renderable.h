@@ -15,10 +15,9 @@ public:
     ~Renderable() override =default;
 
 protected:
-    virtual void render_me() =0;
+    virtual void render() =0;
     virtual void after_children_rendered();
     virtual void post_render() {}
-    void render();
 
 private:
 

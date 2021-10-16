@@ -14,7 +14,7 @@ class Quad: public Renderable {
 public:
     Quad(Object *parent, int x, int y, int w, int h);
 
-    void render_me() override;
+    void render() override;
 
     void set_colour(float r, float g, float b);
 
