@@ -8,6 +8,7 @@
 #include <vector>
 #include <map>
 #include <monch/rendering/container/Container.h>
+#include <monch/editor/app/EditorApp.h>
 
 class Font;
 class RenderedCharacter;
@@ -25,6 +26,22 @@ public:
 
     void increment_cursor_position();
     void decrement_cursor_position();
+
+    class AddCharEvent : public Event {
+    public:
+        AddCharEvent(char32_t ch) : _ch{ch} {}
+
+        bool run(Object *obj) override
+        {
+            auto *ta = (TextArea *)obj;
+            ta->add_char(_ch);
+            EditorApp::ref().set_has_changes();
+            return true;
+        }
+
+    private:
+        char32_t _ch;
+    };
 
 private:
     void reposition_cursor();

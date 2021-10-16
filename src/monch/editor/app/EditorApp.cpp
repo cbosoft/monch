@@ -5,6 +5,7 @@
 
 #include "monch/rendering/gl.h"
 #include "monch/rendering/renderer/Renderer.h"
+#include <monch/editor/text_area/TextArea.h>
 #include "EditorApp.h"
 
 
@@ -131,8 +132,7 @@ void EditorApp::key_released(int key, int mods)
 void EditorApp::character_input(char32_t ch)
 {
     (void)this;
-    _text_area->add_char(ch);
-    _has_changes = true;
+    add_event(new TextArea::AddCharEvent(ch), _text_area);
 }
 
 bool EditorApp::has_resized() const
@@ -140,10 +140,14 @@ bool EditorApp::has_resized() const
     return _has_resized;
 }
 
-void EditorApp::resized(int width, int height)
-{
+void EditorApp::resized(int width, int height) {
     set_size(width, height);
     _text_area->set_size(width, height);
     _has_resized = true;
-    // render();
+}
+
+
+void EditorApp::set_has_changes()
+{
+    _has_changes = true;
 }
