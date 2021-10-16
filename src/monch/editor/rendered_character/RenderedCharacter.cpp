@@ -42,7 +42,7 @@ void RenderedCharacter::render_me()
 {
     Renderer::ref().use_assigned_shader(this);
     glBindTexture(GL_TEXTURE_2D, _texture_id);
-    if (has_changed_position()) {
+    if (has_invalid_position_scale()) {
         update_vbuff_points();
     }
     _vbuff->draw();

@@ -32,6 +32,7 @@ void Container::set_size(int w, int h)
 {
     _w = w;
     _h = h;
+    invalidate_position_scale();
 }
 
 int Container::get_width() const { return _w; }
@@ -93,7 +94,7 @@ void Container::after_children_rendered()
     // render a quad to the screen
     glBindTexture(GL_TEXTURE_2D, _txtr);
     Renderer::ref().use_assigned_shader(this);
-    if (has_changed_position()||true) {
+    if (has_invalid_position_scale()) {
         WindowPoint pt = {0, 0};
         if (has_parent()) {
             pt = get_relative_position<Container>();

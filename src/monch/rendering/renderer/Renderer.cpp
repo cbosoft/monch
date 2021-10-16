@@ -118,5 +118,5 @@ void Renderer::_recursive_render(Object *obj)
         rbl->post_render();
     }
 
-    obj->set_not_moved();
+    obj->validate_position_scale();
 }

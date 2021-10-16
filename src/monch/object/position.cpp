@@ -20,7 +20,7 @@ void Object::set_position(const WindowPoint &pos)
     else {
         _rel_pos = pos;
     }
-    _has_changed_position = true;
+    invalidate_position_scale();
 }
 
 WindowPoint Object::get_relative_position() const
@@ -45,7 +45,7 @@ WindowPoint Object::get_relative_position(std::size_t relative_to_hsh) const
 void Object::set_relative_position(const WindowPoint &rel_pos)
 {
     _rel_pos = rel_pos;
-    _has_changed_position = true;
+    invalidate_position_scale();
 }
 
 void Object::set_relative_position(const WindowPoint &rel_pos, std::size_t relative_to_hsh)
@@ -57,5 +57,5 @@ void Object::set_relative_position(const WindowPoint &rel_pos, std::size_t relat
 void Object::increment_position(const WindowPoint &delta)
 {
     _rel_pos = _rel_pos.load() + delta;
-    _has_changed_position = true;
+    invalidate_position_scale();
 }

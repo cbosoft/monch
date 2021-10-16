@@ -91,7 +91,8 @@ add_executable(${PROJECT_NAME}
         src/monch/editor/rendered_character/RenderedCharacter.h
         src/monch/rendering/container/Container.cpp
         src/monch/rendering/container/Container.h
-        ${TITLEBAR_SOURCE})
+        ${TITLEBAR_SOURCE}
+        src/monch/object/invalidate.cpp)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC ${GLFW_LIB} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${EXTRA_LIBS})
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_SOURCE_DIR}/src" ${OPENGL_INCLUDE_DIR} ${GLFW_INCLUDE_DIR} ${GLEW_INCLUDE_DIR})

@@ -105,8 +105,9 @@ public:
         return get_relative_position(T::type_hash());
     }
 
-    [[nodiscard]] bool has_changed_position() const;
-    void set_not_moved();
+    [[nodiscard]] bool has_invalid_position_scale() const;
+    void validate_position_scale();
+    void invalidate_position_scale();
 
 protected:
 
@@ -131,7 +132,7 @@ private:
     std::list<Event *> _events;
     std::atomic_bool _should_stop_event_loop, _is_event_loop_running;
     std::atomic<WindowPoint> _rel_pos;
-    std::atomic_bool _has_changed_position;
+    std::atomic_bool _has_invalid_position_scale;
 
     Object *_parent;
     std::list<Object *> _children;

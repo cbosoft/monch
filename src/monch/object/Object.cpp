@@ -13,7 +13,7 @@ Object::Object(Object *parent)
     ,   _is_event_loop_running{false}
     ,   _should_stop_event_loop{false}
     ,   _parent{parent}
-    ,   _has_changed_position{true}
+    ,   _has_invalid_position_scale{true}
     ,   _rel_pos({0, 0})
 {
     add_type<Object>();
@@ -104,9 +104,9 @@ void Object::set_parent(Object *object)
     }
     if (object == this) throw std::runtime_error("object cannot be parent of itself");
     _parent = object;
-    _has_changed_position = true;
     if (object != nullptr)
         object->add_child(this);
+    invalidate_position_scale();
 }
 
 void Object::insert_parent(Object *new_parent)
@@ -115,6 +115,7 @@ void Object::insert_parent(Object *new_parent)
         new_parent->set_parent(_parent);
     }
     set_parent(new_parent);
+    invalidate_position_scale();
 }
 
 void Object::add_child(Object *object)
@@ -146,22 +147,6 @@ ConstObjectIter Object::begin() const
 ConstObjectIter Object::end() const
 {
     return _children.end();
-}
-
-bool Object::has_changed_position() const
-{
-    if (_has_changed_position)
-        return true;
-
-    if (_parent && _parent->has_changed_position())
-        return true;
-
-    return false;
-}
-
-void Object::set_not_moved()
-{
-    _has_changed_position = false;
 }
 
 
