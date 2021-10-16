@@ -46,12 +46,13 @@ void TextArea::decrement_cursor_position()
 void TextArea::reposition_cursor()
 {
     if (_cursor_position) {
-        _cursor->set_parent(_rendered_characters[_cursor_position-1]);
-        _cursor->set_relative_position({_rendered_characters[_cursor_position-1]->get_advance(), 0});
+        auto *rchar = _rendered_characters[_cursor_position-1];
+        _cursor->set_parent(rchar);
+        _cursor->set_relative_position({rchar->get_advance(), 0});
     }
     else {
-        _cursor->set_parent(this);
-        _cursor->set_relative_position({0, get_height() - 20});
+        _cursor->set_parent(_topleft);
+        _cursor->set_relative_position({0, 0});
     }
 }
 
@@ -102,7 +103,7 @@ void TextArea::backspace()
 void TextArea::newline()
 {
     auto *nl = new RenderedCharacter(this, ' ', _font);
-    Object *root = this;
+    Object *root = _topleft;
     if (_cursor_position) root = _rendered_characters[_cursor_position-1];
     nl->set_relative_position<TextArea>({0, root->get_position().y-20});
     _text.insert(_text.begin() + _cursor_position, '\n');
