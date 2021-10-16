@@ -18,6 +18,8 @@ public:
 
     void add_char(char32_t c);
 
+    void set_size(int w, int h) final;
+
     void backspace();
     void newline();
 
@@ -31,6 +33,7 @@ private:
     int _cursor_position;
     Font *_font;
     Renderable *_cursor;
+    Object *_topleft;
 };
 
 

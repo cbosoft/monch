@@ -11,10 +11,13 @@ TextArea::TextArea(Object *parent, int w, int h)
     :   Container(parent, w, h)
     ,   _cursor_position{0}
     ,   _font{nullptr}
+    ,   _topleft{nullptr}
 {
     add_type<TextArea>();
     _font = FontManager::ref().get_font("iosevka-regular.ttf", 16);
     _cursor = new RenderedCharacter(this, U'\u258f', _font);
+    _topleft = new Object(this);
+    _topleft->set_relative_position({0, h - 20});
     reposition_cursor();
 }
 
@@ -24,6 +27,12 @@ void TextArea::increment_cursor_position()
         _cursor_position++;
         reposition_cursor();
     }
+}
+
+void TextArea::set_size(int w, int h)
+{
+    Container::set_size(w, h);
+    _topleft->set_relative_position({0, h - 20});
 }
 
 void TextArea::decrement_cursor_position()
@@ -48,16 +57,13 @@ void TextArea::reposition_cursor()
 
 void TextArea::add_char(char32_t c)
 {
-    Object *root = this;
+    Object *root = _topleft;
     if (!_rendered_characters.empty()) root = _rendered_characters[_cursor_position-1];
 
     auto *rchar = new RenderedCharacter(root, c, _font);
 
     if (root->is_a<RenderedCharacter>()) {
         rchar->set_relative_position({((RenderedCharacter *)root)->get_advance(), 0});
-    }
-    else {
-        rchar->set_relative_position({0, get_height() - 20});
     }
 
     if (_cursor_position < (int(_rendered_characters.size()) - 1)) {

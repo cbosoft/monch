@@ -15,7 +15,7 @@ public:
 
     void render_me() final;
     void after_children_rendered() final;
-    void set_size(int w, int h);
+    virtual void set_size(int w, int h);
     [[nodiscard]] WindowPoint get_size() const;
     [[nodiscard]] int get_width() const;
     [[nodiscard]] int get_height() const;
