@@ -19,7 +19,7 @@ EditorApp::EditorApp()
     add_type<EditorApp>();
     int w, h;
     Renderer::ref().get_window_size(w, h);
-    set_size(w, h);
+    Container::set_size(w, h); // explicitly invoke method of container as is virtual method.
     _text_area = new TextArea(this, w, h);
     _text_area->set_colour(0.1, 0.1, 0.1);
     _text_area->set_position({0, 0});
