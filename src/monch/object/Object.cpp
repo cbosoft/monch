@@ -62,7 +62,7 @@ void Object::set_parent(Object *object)
     if (_parent) {
         _parent->remove_child(this);
     }
-    if (object == this) throw std::runtime_error("object cannot be parent of itself");
+    if (object && (object == this || object->find_in_parents(this))) throw std::runtime_error("object cannot be parent of itself");
     _parent = object;
     _container = find_in_parents<Container>();
     if (object != nullptr)
