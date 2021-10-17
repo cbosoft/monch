@@ -6,7 +6,7 @@
 #define MONCH_CONTAINER_H
 
 #include <monch/rendering/renderable/Renderable.h>
-#include <monch/rendering/vertex_buffer/VertexBuffer.h>
+#include <monch/rendering/quad/Quad.h>
 
 class Container: public Renderable {
     MONCH_OBJECT("Container")
@@ -21,7 +21,7 @@ public:
 
 private:
     float _r, _g, _b;
-    VertexBuffer _vbuff;
+    Quad _quad;
     uint _fbuff, _txtr;
 };
 

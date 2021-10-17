@@ -10,13 +10,13 @@
 #include "Container.h"
 
 Container::Container(Object *parent, int w, int h)
-    :   Renderable(parent)
-    ,   _r{0}
-    ,   _g{0}
-    ,   _b{0}
-    ,   _vbuff{this, 4}
-    ,   _fbuff{0}
-    ,   _txtr{0}
+    : Renderable(parent)
+    , _r{0}
+    , _g{0}
+    , _b{0}
+    , _quad{this}
+    , _fbuff{0}
+    , _txtr{0}
 {
     add_type<Container>();
     Object::set_size(w, h);
@@ -24,7 +24,7 @@ Container::Container(Object *parent, int w, int h)
     glGenTextures(1, &_txtr);
     Renderer::ref().assign_shader(this, "texture");
     set_relative_position({0, 0});
-    _vbuff.set_tex_coords({{0, 0}, {1, 0}, {1, 1}, {0, 1}});
+    _quad.set_tex_coords({NormalisedPoint{0, 0}, NormalisedPoint{1, 0}, NormalisedPoint{1, 1}, NormalisedPoint{0, 1}});
 }
 
 void Container::render()
@@ -88,18 +88,7 @@ void Container::after_children_rendered()
     // render a quad to the screen
     glBindTexture(GL_TEXTURE_2D, _txtr);
     Renderer::ref().use_assigned_shader(this);
-    if (has_invalid_position_scale()) {
-        WindowPoint pt = {0, 0};
-        if (has_parent()) {
-            pt = get_relative_position<Container>();
-        }
-        else {
-            pt = get_absolute_position();
-        }
-        WindowPoint sz = get_size();
-        _vbuff.set_points({{pt.x, pt.y}, {pt.x+sz.x, pt.y}, {pt.x+sz.x, pt.y+sz.y}, {pt.x, pt.y+sz.y}});
-    }
-    _vbuff.draw();
+    _quad.draw();
 }
 
 void Container::set_colour(float r, float g, float b)

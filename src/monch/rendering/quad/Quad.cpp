@@ -9,25 +9,26 @@
 #include <monch/editor/app/EditorApp.h>
 #include <monch/rendering/gl.h>
 
-#include "VertexBuffer.h"
+#include "Quad.h"
 
 
-VertexBuffer::VertexBuffer(Renderable *owner, uint n)
+Quad::Quad(Renderable *owner)
     :   _id{0}
     ,   _va{0}
-    ,   _unscaled(n)
     ,   _owner{owner}
     ,   _is_init{false}
     ,   _sync_needed{true}
+    ,   _offset({0, 0})
 {
-    for (uint i = 0; i < n; i++) {
-        _vertices.push_back({.x=0, .y=0, .z=0., .r=1., .g=1., .b=1., .a=1., .s=0., .t=0.});
-    }
+    _vertices[0] = {.x=0, .y=0, .z=0., .r=1., .g=1., .b=1., .a=1., .s=0., .t=0.};
+    _vertices[1] = {.x=0, .y=0, .z=0., .r=1., .g=1., .b=1., .a=1., .s=0., .t=0.};
+    _vertices[2] = {.x=0, .y=0, .z=0., .r=1., .g=1., .b=1., .a=1., .s=0., .t=0.};
+    _vertices[3] = {.x=0, .y=0, .z=0., .r=1., .g=1., .b=1., .a=1., .s=0., .t=0.};
 }
 
-void VertexBuffer::init()
+void Quad::init()
 {
-    Renderer::ref().error_check("vbuff ctor (start)");
+    Renderer::ref().error_check("quad init (start)");
     glGenBuffers(1, &_id);
     sync_gl();
     glGenVertexArrays(1, &_va);
@@ -38,25 +39,17 @@ void VertexBuffer::init()
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)(offsetof(Vertex, s)));
     glEnableVertexAttribArray(2);
-    Renderer::ref().error_check("vbuff ctor");
+    Renderer::ref().error_check("quad init");
 }
 
-VertexBuffer::~VertexBuffer()
+Quad::~Quad()
 {
     uint buffers[1] = {_id};
     glDeleteBuffers(1, buffers);
 }
 
 
-void VertexBuffer::set_points(const std::vector<WindowPoint> &points)
-{
-    if (points.size() != _vertices.size()) return;
-    _unscaled = points;
-    rescale();
-}
-
-
-void VertexBuffer::set_colour(float r, float g, float b, float a)
+void Quad::set_colour(float r, float g, float b, float a)
 {
     for (auto &vertex : _vertices) {
         vertex.r = r;
@@ -68,7 +61,7 @@ void VertexBuffer::set_colour(float r, float g, float b, float a)
 }
 
 
-void VertexBuffer::set_tex_coords(const std::vector<NormalisedPoint> &points)
+void Quad::set_tex_coords(const std::array<NormalisedPoint, 4> &points)
 {
     if (points.size() != _vertices.size()) return;
 
@@ -85,7 +78,7 @@ void VertexBuffer::set_tex_coords(const std::vector<NormalisedPoint> &points)
 }
 
 
-void VertexBuffer::sync_gl()
+void Quad::sync_gl()
 {
     glBindBuffer(GL_ARRAY_BUFFER, _id);
     glBufferData(GL_ARRAY_BUFFER, long(_vertices.size()*sizeof(Vertex)), &_vertices[0], GL_DYNAMIC_DRAW);
@@ -94,9 +87,11 @@ void VertexBuffer::sync_gl()
     Renderer::ref().error_check("VertexBuffer::sync_gl()");
 }
 
-void VertexBuffer::draw()
+
+void Quad::draw()
 {
     if (!_is_init) init();
+    if (_owner->has_invalid_position_scale()) rescale();
     if (_sync_needed) sync_gl();
     glBindBuffer(GL_ARRAY_BUFFER, _id);
     glBindVertexArray(_va);
@@ -105,10 +100,18 @@ void VertexBuffer::draw()
     Renderer::ref().error_check("VertexBuffer::draw()");
 }
 
-void VertexBuffer::rescale()
+
+void Quad::rescale()
 {
     auto it_v = _vertices.begin();
-    auto it_p = _unscaled.begin();
+    WindowPoint pos = _owner->get_position(), size = _owner->get_size();
+    std::list<WindowPoint> points = {
+            pos,
+            {pos.x+size.x, pos.y},
+            pos+size,
+            {pos.x, pos.y+size.y}
+    };
+    auto it_p = points.begin();
     Container *c = nullptr;
     if (_owner->has_container()) {
         c = _owner->get_container();
@@ -117,13 +120,19 @@ void VertexBuffer::rescale()
         // no container; obj is its own container
         c = (Container *)_owner;
     }
+
     for (; it_v != _vertices.end(); it_v++, it_p++) {
         auto &vertex = *it_v;
         const auto &pt = *it_p;
 
-        NormalisedPoint n_pt = c->get_norm(pt);
+        NormalisedPoint n_pt = c->get_norm(pt+_offset);
         vertex.x = n_pt.x;
         vertex.y = n_pt.y;
     }
     _sync_needed = true;
+}
+
+void Quad::set_offset(const WindowPoint &off)
+{
+    _offset = off;
 }

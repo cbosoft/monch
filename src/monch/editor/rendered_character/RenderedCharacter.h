@@ -5,7 +5,7 @@
 #ifndef MONCH_RENDEREDCHARACTER_H
 #define MONCH_RENDEREDCHARACTER_H
 
-#include <monch/rendering/vertex_buffer/VertexBuffer.h>
+#include <monch/rendering/quad/Quad.h>
 #include <monch/rendering/renderable/Renderable.h>
 #include <monch/rendering/renderer/Renderer.h>
 #include <monch/rendering/font/manager/FontManager.h>
@@ -24,12 +24,10 @@ public:
 
 private:
 
-    void update_vbuff_points();
-
-    VertexBuffer *_vbuff;
+    Quad *_quad;
     uint _texture_id;
 
-    int _w, _h, _advance, _bearing_x, _bearing_y;
+    int _advance, _bearing_x, _bearing_y;
 
     Font *_font;
     char32_t _char;

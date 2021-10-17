@@ -10,7 +10,7 @@
 
 #include <monch/util.h>
 #include <monch/rendering/gl.h>
-#include <monch/rendering/vertex_buffer/VertexBuffer.h>
+#include <monch/rendering/quad/Quad.h>
 #include <monch/object/Object.h>
 
 void window_key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);

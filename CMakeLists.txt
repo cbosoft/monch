@@ -69,10 +69,8 @@ add_executable(${PROJECT_NAME}
         src/monch/util.h
         src/monch/rendering/renderer/shaders.cpp
         src/monch/rendering/gl.h
-        src/monch/rendering/renderable/quad/Quad.cpp
-        src/monch/rendering/renderable/quad/Quad.h
-        src/monch/rendering/vertex_buffer/VertexBuffer.cpp
-        src/monch/rendering/vertex_buffer/VertexBuffer.h
+        src/monch/rendering/quad/Quad.cpp
+        src/monch/rendering/quad/Quad.h
         src/monch/rendering/renderer/error.cpp
         src/monch/rendering/font/font/ctor.cpp
         src/monch/rendering/font/font/dtor.cpp
@@ -94,7 +92,7 @@ add_executable(${PROJECT_NAME}
         src/monch/object/invalidate.cpp
         src/monch/events/manager/EventManager.cpp
         src/monch/events/manager/EventManager.h
-        src/monch/events/event/Event.h src/monch/object/find.cpp src/monch/object/size.cpp)
+        src/monch/events/event/Event.h src/monch/object/find.cpp src/monch/object/size.cpp src/monch/rendering/Vertex.h)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC ${GLFW_LIB} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${EXTRA_LIBS})
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_SOURCE_DIR}/src" ${OPENGL_INCLUDE_DIR} ${GLFW_INCLUDE_DIR} ${GLEW_INCLUDE_DIR})
