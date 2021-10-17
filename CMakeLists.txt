@@ -92,7 +92,12 @@ add_executable(${PROJECT_NAME}
         src/monch/object/invalidate.cpp
         src/monch/events/manager/EventManager.cpp
         src/monch/events/manager/EventManager.h
-        src/monch/events/event/Event.h src/monch/object/find.cpp src/monch/object/size.cpp src/monch/rendering/Vertex.h)
+        src/monch/events/event/Event.h
+        src/monch/object/find.cpp
+        src/monch/object/size.cpp
+        src/monch/rendering/Vertex.h
+        src/monch/editor/app/layout.cpp
+        )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC ${GLFW_LIB} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${EXTRA_LIBS})
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_SOURCE_DIR}/src" ${OPENGL_INCLUDE_DIR} ${GLFW_INCLUDE_DIR} ${GLEW_INCLUDE_DIR})

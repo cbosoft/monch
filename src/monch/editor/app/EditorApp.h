@@ -35,6 +35,11 @@ public:
     void render() final;
     void set_has_changes();
 
+    bool dictates_object_size_position() const override { return true; }
+    WindowPoint get_size_of(const Object *object) override;
+    WindowPoint get_position_of(const Object *object) override;
+
+
 private:
     EditorApp();
 

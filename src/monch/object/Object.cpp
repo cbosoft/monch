@@ -101,6 +101,19 @@ void Object::remove_child(Object *object)
     }
 }
 
+
+int Object::count_children() const
+{
+    return int(_children.size());
+}
+
+
+const std::list<Object *> &Object::get_children() const
+{
+    return _children;
+}
+
+
 ConstObjectIter Object::begin() const
 {
     return _children.begin();

@@ -85,7 +85,12 @@ void Object::increment_position(const WindowPoint &delta)
 WindowPoint Object::get_position() const
 {
     if (has_container()) {
-        return get_relative_position(_container);
+        if (_container->dictates_object_size_position()) {
+            return _container->get_position_of(this);
+        }
+        else {
+            return get_relative_position(_container);
+        }
     }
     else {
         return get_absolute_position();

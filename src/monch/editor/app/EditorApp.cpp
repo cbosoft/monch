@@ -3,8 +3,9 @@
 //
 #include <iostream>
 
-#include "monch/rendering/gl.h"
-#include "monch/rendering/renderer/Renderer.h"
+#include <monch/rendering/gl.h>
+#include <monch/rendering/renderer/Renderer.h>
+#include <monch/rendering/quad/renderable/RenderableQuad.h>
 #include <monch/editor/text_area/TextArea.h>
 #include "EditorApp.h"
 

@@ -2,10 +2,14 @@
 // Created by Christopher Boyle on 16/10/2021.
 //
 
+#include <monch/rendering/container/Container.h>
 #include "Object.h"
 
 WindowPoint Object::get_size() const
 {
+    if (_container && _container->dictates_object_size_position()) {
+        return _container->get_size_of(this);
+    }
     return _size;
 }
 

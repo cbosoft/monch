@@ -45,8 +45,6 @@ static std::size_t type_hash() \
 }
 
 class Container;
-
-// generic object; reciever of events and such
 class Object {
     MONCH_OBJECT_BASE("Object")
 public:
@@ -63,6 +61,8 @@ public:
     void insert_parent(Object *parent);
     void add_child(Object *object);
     void remove_child(Object *object);
+    [[nodiscard]] int count_children() const;
+    [[nodiscard]] const std::list<Object *> &get_children() const;
 
     Object *find_in_children(const Object *object) const;
     Object *find_in_parents(const Object *object) const;
