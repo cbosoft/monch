@@ -97,6 +97,8 @@ add_executable(${PROJECT_NAME}
         src/monch/object/size.cpp
         src/monch/rendering/Vertex.h
         src/monch/editor/app/layout.cpp
+        src/monch/rendering/quad/renderable/RenderableQuad.cpp
+        src/monch/rendering/quad/renderable/RenderableQuad.h
         )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC ${GLFW_LIB} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${EXTRA_LIBS})
