@@ -99,7 +99,7 @@ add_executable(${PROJECT_NAME}
         src/monch/editor/app/layout.cpp
         src/monch/rendering/quad/renderable/RenderableQuad.cpp
         src/monch/rendering/quad/renderable/RenderableQuad.h
-        )
+        src/monch/editor/scrollable_area/ScrollableArea.cpp src/monch/editor/scrollable_area/ScrollableArea.h)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC ${GLFW_LIB} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${EXTRA_LIBS})
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_SOURCE_DIR}/src" ${OPENGL_INCLUDE_DIR} ${GLFW_INCLUDE_DIR} ${GLEW_INCLUDE_DIR})

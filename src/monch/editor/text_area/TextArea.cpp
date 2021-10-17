@@ -12,6 +12,10 @@ TextArea::TextArea(Object *parent, int w, int h)
     ,   _cursor_position{0}
     ,   _font{nullptr}
     ,   _topleft{nullptr}
+    ,   _min_w{w}
+    ,   _min_h{h}
+    ,   _longest_line{0}
+    ,   _line_count{0}
 {
     add_type<TextArea>();
     _font = FontManager::ref().get_font("iosevka-regular.ttf", 16);
@@ -31,6 +35,8 @@ void TextArea::increment_cursor_position()
 
 void TextArea::set_size(int w, int h)
 {
+    if (w < _min_w) w = _min_w;
+    if (h < _min_h) h = _min_h;
     Container::set_size(w, h);
     _topleft->set_relative_position({0, h - 20});
 }
@@ -75,6 +81,9 @@ void TextArea::add_char(char32_t c)
     _text.insert(_text.begin() + _cursor_position, c);
     _rendered_characters.insert(_rendered_characters.begin()+_cursor_position, rchar);
     increment_cursor_position();
+    int this_line_length = measure_line();
+    if (this_line_length > _longest_line) _longest_line = this_line_length;
+    set_size(_longest_line, _line_count*20);
 }
 
 void TextArea::backspace()
@@ -102,7 +111,7 @@ void TextArea::backspace()
 
 void TextArea::newline()
 {
-    auto *nl = new RenderedCharacter(this, ' ', _font);
+    auto *nl = new RenderedCharacter(this, U'\n', _font);
     Object *root = _topleft;
     if (_cursor_position) root = _rendered_characters[_cursor_position-1];
     nl->set_relative_position<TextArea>({0, root->get_absolute_position().y - 20});
@@ -110,4 +119,31 @@ void TextArea::newline()
     _rendered_characters.insert(_rendered_characters.begin()+_cursor_position, nl);
 
     increment_cursor_position();
+
+    _line_count++;
+    set_size(_longest_line, _line_count*20);
+}
+
+int TextArea::measure_line()
+{
+    if (_rendered_characters.empty()) return 0;
+    int i = _cursor_position ? _cursor_position-1 : 0;
+    RenderedCharacter *curr = _rendered_characters[i], *start = curr, *end = curr;
+    while (true) {
+        if ((start->get_char() == U'\n') || (start->get_parent() == _topleft)) {
+            break;
+        }
+        start = (RenderedCharacter *)start->get_parent();
+    }
+    while (true) {
+        const auto &children = end->get_children();
+        if (children.empty()) break;
+        Object *child = children.front();
+        if (end->get_char() == '\n') {
+            break;
+        }
+        end = (RenderedCharacter *)child;
+    }
+
+    return end->get_position().x - start->get_position().x;
 }

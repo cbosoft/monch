@@ -101,7 +101,7 @@ WindowPoint Object::get_position() const
 void Object::set_position(const WindowPoint &pt)
 {
     if (has_container()) {
-        set_relative_position(pt, _container);
+        set_relative_position(pt, _container); // TODO not working properly?
     }
     else {
         set_absolute_position(pt);

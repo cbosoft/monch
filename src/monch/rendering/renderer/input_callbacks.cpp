@@ -2,6 +2,7 @@
 // Created by Christopher Boyle on 13/10/2021.
 //
 
+#include <iostream>
 #include <monch/editor/app/EditorApp.h>
 #include "Renderer.h"
 
@@ -34,4 +35,11 @@ void window_size_callback(GLFWwindow *notused, int width, int height)
 {
     (void) notused;
     EditorApp::ref().resized(width, height);
+}
+
+
+void window_scroll_callback(GLFWwindow *win, double dx, double dy)
+{
+    (void) win;
+    EditorApp::ref().scrolled(dx, -dy);
 }

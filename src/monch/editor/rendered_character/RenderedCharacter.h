@@ -22,6 +22,8 @@ public:
 
     [[nodiscard]] int get_advance() const;
 
+    [[nodiscard]] char32_t get_char() const;
+
 private:
 
     Quad *_quad;

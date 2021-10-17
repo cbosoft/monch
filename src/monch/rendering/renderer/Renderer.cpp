@@ -75,6 +75,7 @@ void Renderer::init()
     glfwSetCharCallback(_glfw_window, &window_character_callback);
 
     glfwSetWindowSizeCallback(_glfw_window, &window_size_callback);
+    glfwSetScrollCallback(_glfw_window, &window_scroll_callback);
     error_check("Renderer::init() -> after set callbacks");
 }
 

@@ -19,8 +19,6 @@ public:
 
     void add_char(char32_t c);
 
-    void set_size(int w, int h) final;
-
     void backspace();
     void newline();
 
@@ -44,6 +42,8 @@ public:
     };
 
 private:
+    int measure_line();
+    void set_size(int w, int h) final;
     void reposition_cursor();
     std::vector<char32_t> _text;
     std::vector<RenderedCharacter *> _rendered_characters;
@@ -51,6 +51,9 @@ private:
     Font *_font;
     Renderable *_cursor;
     Object *_topleft;
+
+    int _min_w, _min_h;
+    int _longest_line, _line_count;
 };
 
 

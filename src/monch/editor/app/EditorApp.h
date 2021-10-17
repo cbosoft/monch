@@ -20,6 +20,7 @@ union unicode_char_to_cstr {
 // Forward declarations
 class GLFWwindow;
 class TextArea;
+class ScrollableArea;
 
 
 class EditorApp final: public Container, public EventManager {
@@ -47,6 +48,7 @@ private:
     void key_released(int key, int mods);
     void character_input(char32_t ch);
     void resized(int width, int height);
+    void scrolled(double dx, double dy);
 
     void post_render() final;
 
@@ -55,9 +57,11 @@ private:
     friend void window_key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
     friend void window_character_callback(GLFWwindow *window, unsigned int codepoint);
     friend void window_size_callback(GLFWwindow *win, int width, int height);
+    friend void window_scroll_callback(GLFWwindow *win, double dx, double dy);
 
     std::thread *_event_thread;
     TextArea *_text_area;
+    ScrollableArea *_scroll_area;
     std::chrono::time_point<std::chrono::system_clock> _time_last_render;
 };
 

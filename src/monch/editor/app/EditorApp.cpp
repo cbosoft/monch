@@ -7,6 +7,7 @@
 #include <monch/rendering/renderer/Renderer.h>
 #include <monch/rendering/quad/renderable/RenderableQuad.h>
 #include <monch/editor/text_area/TextArea.h>
+#include <monch/editor/scrollable_area/ScrollableArea.h>
 #include "EditorApp.h"
 
 
@@ -16,15 +17,17 @@ EditorApp::EditorApp()
     ,   _has_resized{false}
     ,   _event_thread{nullptr}
     ,   _text_area{nullptr}
+    ,   _scroll_area{nullptr}
     ,   _has_changes{false}
 {
     add_type<EditorApp>();
     int w, h;
     Renderer::ref().get_window_size(w, h);
     Container::set_size(w, h); // explicitly invoke method of container as is virtual method.
-    _text_area = new TextArea(this, w, h);
+    _text_area = new TextArea(this, 100, 100);
     _text_area->set_colour(0.1, 0.1, 0.1);
     _text_area->set_absolute_position({0, 0});
+    _scroll_area = new ScrollableArea(this, _text_area);
 }
 
 
@@ -117,6 +120,16 @@ void EditorApp::key_pressed(int key, int mods)
             _has_changes = true;
             break;
 
+        case GLFW_KEY_UP:
+            _scroll_area->set_scroll_velocity(0, 10);
+            _has_changes = true;
+            break;
+
+        case GLFW_KEY_DOWN:
+            _scroll_area->set_scroll_velocity(0, -10);
+            _has_changes = true;
+            break;
+
         default:
             break;
     }
@@ -143,7 +156,7 @@ bool EditorApp::has_resized() const
 
 void EditorApp::resized(int width, int height) {
     set_size(width, height);
-    _text_area->set_size(width, height);
+    //_text_area->set_size(width, height);
     _has_resized = true;
 }
 
@@ -151,4 +164,10 @@ void EditorApp::resized(int width, int height) {
 void EditorApp::set_has_changes()
 {
     _has_changes = true;
+}
+
+
+void EditorApp::scrolled(double dx, double dy)
+{
+    _scroll_area->scroll(int(dx*10), int(dy*10));
 }

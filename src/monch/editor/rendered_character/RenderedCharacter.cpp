@@ -15,7 +15,7 @@ RenderedCharacter::RenderedCharacter(Object *parent, char32_t ch, Font *font)
 {
     add_type<RenderedCharacter>();
     Renderer::ref().assign_shader(this, "font");
-    Character *c = font->get_char(ch);
+    Character *c = font->get_char(ch == U'\n' ? U' ' : ch);
     Renderable::set_size(c->w, c->h);
     _bearing_x = c->bearing_x;
     _bearing_y = c->bearing_y;
@@ -41,4 +41,9 @@ void RenderedCharacter::render()
     Renderer::ref().use_assigned_shader(this);
     glBindTexture(GL_TEXTURE_2D, _texture_id);
     _quad->draw();
+}
+
+char32_t RenderedCharacter::get_char() const
+{
+    return _char;
 }
